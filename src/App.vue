@@ -1,29 +1,30 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+    <v-app>
+        <v-app-bar app color="primary" dark>
+            <v-spacer></v-spacer>
+            <v-btn @click="showConnectionDialog = true"><v-icon>mdi-lan-connect</v-icon> Connect</v-btn>
+        </v-app-bar>
+
+        <v-main>
+            <Viewer />
+            <Connect :show.sync="showConnectionDialog"></Connect>
+        </v-main>
+    </v-app>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+import Viewer from '@/components/ViewerUI/Viewer.vue'
+import Connect from '@/components/ViewerUI/Connect.vue'
 
 @Component({
-  components: {
-    HelloWorld,
-  },
+    components: {
+        Viewer,
+        Connect
+    }
 })
-export default class App extends Vue {}
-</script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+export default class App extends Vue {
+    showConnectionDialog = false
 }
-</style>
+</script>
