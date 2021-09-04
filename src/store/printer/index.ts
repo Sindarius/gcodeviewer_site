@@ -5,7 +5,10 @@ import { mutations } from './mutations'
 import { getters } from './getters'
 
 export const getDefaultState = (): PrinterState => {
-    return {}
+    return {
+        sourcemodel: {},
+        model: {}
+    }
 }
 
 const state = getDefaultState()

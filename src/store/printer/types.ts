@@ -1,4 +1,9 @@
-export interface PrinterState {}
+export interface PrinterState {
+    sourcemodel: any
+    model: any
+    motion?: PrinterStateMotion
+    status?: PrinterStatus
+}
 
 export interface PrinterStateMotion {
     x: number
