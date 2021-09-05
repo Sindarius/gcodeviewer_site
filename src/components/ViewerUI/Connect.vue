@@ -5,7 +5,6 @@
             <v-card-text>
                 <span>Address</span>
                 <v-text-field v-model="address"></v-text-field>
-                <div>{{ curstate }}</div>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -22,8 +21,8 @@
 import Vue from 'vue'
 import { Component, PropSync } from 'vue-property-decorator'
 import DuetPollConnector from '@/store/connectors/DuetPollConnector'
+import DuetRestConnector from '@/store/connectors/DuetRestConnector'
 import BaseConnector from '@/store/connectors/BaseConnector'
-import { PrinterState } from '@/store/printer/types'
 
 @Component
 export default class ConnectDialog extends Vue {
@@ -31,21 +30,34 @@ export default class ConnectDialog extends Vue {
     address = ''
     connector!: BaseConnector
 
-    get curstate(): PrinterState {
-        return this.$store.state.printer
-    }
-
     get isConnected(): boolean {
-        return this.$store.getters['printer/isConnected']
+        return this.$store.getters['connections/isConnected']
     }
 
-    connect(): void {
-        if (this.isConnected) return
-        this.connector = new DuetPollConnector(this.$store)
-        this.connector.connect(this.address)
+    get currentConnection(): BaseConnector {
+        return this.$store.state.connection
     }
-    cancel() {
-        this.connector.disconnect()
+
+    async connect(): Promise<void> {
+        if (this.isConnected) return
+
+        //Try poll connection
+        try {
+            this.connector = new DuetPollConnector(this.$store)
+            await this.connector.connect(this.address)
+        } catch {
+            //try rest connector
+            if (!this.connector.connected) {
+                this.connector = new DuetRestConnector(this.$store)
+                await this.connector.connect(this.address)
+            }
+        }
+
+        this.$store.commit('connections/setConnection', this.connector)
+        this.showDialog = false
+    }
+    cancel(): void {
+        this.showDialog = false
     }
 }
 </script>

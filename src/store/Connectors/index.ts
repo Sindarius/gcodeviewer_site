@@ -1,5 +1,4 @@
 import { Module } from 'vuex'
-import { PrinterStatus } from '../printer/types'
 import BaseConnector from './BaseConnector'
 import { PrinterConnection } from './types'
 import { mutations } from './mutations'

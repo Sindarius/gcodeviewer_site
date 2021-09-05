@@ -6,9 +6,9 @@ export interface PrinterState {
 }
 
 export interface PrinterStateMotion {
-    x: number
-    y: number
-    z: number
+    X: number
+    Y: number
+    Z: number
 }
 
 export interface PrinterStatePrinting {
@@ -16,7 +16,10 @@ export interface PrinterStatePrinting {
 }
 
 export enum PrinterStatus {
-    Printing,
-    Idle,
-    Error
+    Unknown = 'Unknown',
+    Printing = 'Printing',
+    Idle = 'Idle',
+    Error = 'Error',
+    Busy = 'Busy',
+    Simulating = 'Simulating'
 }

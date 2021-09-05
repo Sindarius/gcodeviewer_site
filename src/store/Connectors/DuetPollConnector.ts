@@ -21,13 +21,12 @@ export default class DuetPollConnector extends BaseConnector {
         const sessionKey = await axios.get(`${protocol}://${this.address}/rr_connect?password=${this.password}`, { responseType: 'text' })
         if (sessionKey.status == 200) {
             this.connected = true
-            //start polling
             this.poll()
         }
     }
 
     async poll() {
-        if (!this.connected) return
+        if (!this.connected || this.store === null) return
 
         const response = await axios.get(`${this.protocol}://${this.address}/rr_model?flags=d99fn`)
         this.store.commit('printer/updateDuetModelData', response.data.result)
@@ -36,15 +35,19 @@ export default class DuetPollConnector extends BaseConnector {
         const moves = await axios.get(`${this.protocol}://${this.address}/rr_model?key=move&flags=d99vn`)
         this.store.commit('printer/updateDuetModelData', { move: moves.data.result })
 
+        const job = await axios.get(`${this.protocol}://${this.address}/rr_model?key=move&flags=d99vn`)
+        this.store.commit('printer/updateDuetModelData', { job: job.data.result })
+
         this.pollInterval = setInterval(async () => {
             const response = await axios.get(`${this.protocol}://${this.address}/rr_model?flags=d99fn`)
-            this.store.commit('printer/updateDuetModelData', response.data.result)
+            this.store?.commit('printer/updateDuetModelData', response.data.result)
         }, 250)
     }
 
     disconnect() {
         clearInterval(this.pollInterval)
         this.pollInterval = -1
+        super.disconnect()
     }
 
     timeToStr(time: Date): string {

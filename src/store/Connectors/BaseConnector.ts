@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios, { ResponseType } from 'axios'
+import { Store } from 'vuex'
 
 export default class BaseConnector {
     protocol = 'http'
@@ -9,13 +10,13 @@ export default class BaseConnector {
     sessionKey = ''
     password = 'reprap'
     connected = false
-    store = null
+    store: Store<any> | null
 
     constructor(store: any) {
         this.store = store
     }
 
-    connect(address: string, protocol = 'http', password = 'reprap'): void {
+    async connect(address: string, protocol = 'http', password = 'reprap'): Promise<void> {
         return
     }
 
@@ -24,6 +25,7 @@ export default class BaseConnector {
     }
 
     disconnect(): void {
-        return
+        this.connected = false
+        this.store?.commit('printer/clear', {})
     }
 }
