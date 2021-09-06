@@ -67,19 +67,19 @@ export default class KlipperRestConnector extends BaseConnector {
         })
     }
 
-    disconnect() {
+    disconnect(): void {
         clearInterval(this.pollInterval)
         this.pollInterval = -1
         //this.webSocket?.close()
         super.disconnect()
     }
 
-    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
+    async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
         filename = filename.replace('/home/pi/gcode_files', '')
         const response = await axios.get(`${this.protocol}://${this.address}/server/files/gcodes${filename}`, {
             onDownloadProgress: (progressEvent) => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                statusCallback(percentCompleted)
+                statusCallback(percentCompleted, `Downloading ${filename}`)
             }
         })
         return response.data

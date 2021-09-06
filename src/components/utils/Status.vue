@@ -1,7 +1,10 @@
 <template>
     <div class="div-style mr-5">
-        <v-img :contain="true" width="45" height="45" class="align-text mr-3" :src="getConnectionIcon"></v-img>
-        <span class="address-text">{{ address }} {{ status }}</span>
+        <span v-if="getConnectionIcon === ''" class="address-text">Disconnected</span>
+        <span>
+            <v-img :contain="true" width="45" height="45" class="align-text mr-3" :src="getConnectionIcon"></v-img>
+            <span class="address-text">{{ address }} {{ status }}</span>
+        </span>
     </div>
 </template>
 
@@ -25,10 +28,8 @@
 </style>
 
 <script lang="ts">
-import { PrinterStatus } from '@/store/printer/types'
 import BaseMixin from '@/components/mixin/BaseMixin'
 import { Component } from 'vue-property-decorator'
-import BaseConnector from '@/store/connectors/BaseConnector'
 import { ConnectionType } from '@/store/connectors/types'
 
 @Component

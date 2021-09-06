@@ -43,7 +43,7 @@ export default class BaseConnector {
         return result
     }
 
-    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
+    async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
         return ''
     }
 }

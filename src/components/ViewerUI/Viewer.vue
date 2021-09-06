@@ -1,6 +1,36 @@
 <template>
-    <canvas class="canvasSizing" ref="viewercanvas" />
+    <div>
+        <canvas class="canvas-sizing" ref="viewercanvas" />
+        <v-progress-linear v-show="downloading" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
+            <template v-slot:default="{ value }">
+                <strong class="progress-text">{{ Math.ceil(value) }}% {{ message }} </strong>
+            </template>
+        </v-progress-linear>
+    </div>
 </template>
+
+<style scoped lang="scss">
+.canvas-sizing {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.progress-position {
+    position: absolute;
+    top: 5px;
+    left: 50px;
+    width: calc(100% - 100px);
+}
+.progress-text {
+    color: white;
+}
+/* Transitions lag when trying to show loading progress */
+.disable-transition {
+    transition: none !important;
+}
+</style>
 
 <script lang="ts">
 // @ts-ignore
@@ -14,6 +44,9 @@ import { Viewer as ViewerState } from '@/store/viewer/types'
 export default class Viewer extends ViewerMixin {
     @Ref('viewercanvas') viewercanvas!: HTMLCanvasElement
     trackJob = false
+    downloading = false
+    progressPercent = 0
+    message = ''
 
     mounted(): void {
         //register events
@@ -74,7 +107,6 @@ export default class Viewer extends ViewerMixin {
 
     @Watch('buildVolume', { deep: true })
     buildVolumeChanged(to: BuildVolume[]): void {
-        console.log(to)
         for (var axesIdx in to) {
             let axes = to[axesIdx]
             if ('XYZ'.includes(axes.axes)) {
@@ -84,23 +116,27 @@ export default class Viewer extends ViewerMixin {
             }
         }
         Viewer.viewer.bed.commitBedSize()
-        console.log(Viewer.viewer.bed)
         Viewer.viewer.reload()
     }
 
-    updatePercent(status: number): void {
-        console.log(status)
+    updatePercent(status: number, message: string): void {
+        this.progressPercent = status
+        this.message = message
     }
 
     async trackCurrentJob(): Promise<void> {
         if (this.currentJob !== null) {
+            this.downloading = true
             let file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
                 Viewer.viewer.updateRenderQuality(5)
+                this.downloading = false
+                this.progressPercent = 0
                 await Viewer.viewer.processFile(file)
                 Viewer.viewer.gcodeProcessor.forceRedraw()
                 this.trackJob = true
             }
+            this.downloading = false
         }
     }
 
@@ -109,13 +145,3 @@ export default class Viewer extends ViewerMixin {
     }
 }
 </script>
-
-<style scoped lang="scss">
-.canvasSizing {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-</style>

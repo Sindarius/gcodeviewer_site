@@ -16,7 +16,6 @@ export default class DuetRestConnector extends BaseConnector {
         this.password = password
         try {
             const sessionKey = await axios.get(`${protocol}://${this.address}/machine/connect`)
-            console.log(sessionKey)
             if (sessionKey.status == 200) {
                 this.connected = true
             }
@@ -51,12 +50,12 @@ export default class DuetRestConnector extends BaseConnector {
         super.disconnect()
     }
 
-    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
-        filename = encodeURIComponent(filename)
-        const response = await axios.get(`${this.protocol}://${this.address}/machine/file/${filename}`, {
+    async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
+        const encodedFilename = encodeURIComponent(filename)
+        const response = await axios.get(`${this.protocol}://${this.address}/machine/file/${encodedFilename}`, {
             onDownloadProgress: (progressEvent) => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                statusCallback(percentCompleted)
+                statusCallback(percentCompleted, `Downloading ${filename}`)
             }
         })
         return response.data

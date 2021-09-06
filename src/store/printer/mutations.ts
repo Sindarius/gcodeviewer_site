@@ -6,6 +6,10 @@ import axios from 'axios'
 import { getDefaultState } from '../connectors'
 
 export const mutations: MutationTree<PrinterState> = {
+    /****************************************************************************/
+    /*  DUET */
+    /****************************************************************************/
+
     updateDuetModelData(state, payload) {
         if (state.sourcemodel === null) {
             Vue.set(state, 'sourcemodel', {})
@@ -24,7 +28,6 @@ export const mutations: MutationTree<PrinterState> = {
         Vue.set(state, 'motion', axesValues)
 
         //get bed size
-        state.buildVolume
         let buildVolume: BuildVolume[] = []
         buildVolume = dwcAxes.map((axis: { letter: string; min: number; max: number }) => new BuildVolume(axis.letter, axis.min, axis.max))
         const match = state.buildVolume.every((value, index) => value.min === state.buildVolume[index].min && value.max === state.buildVolume[index].max)
@@ -54,12 +57,14 @@ export const mutations: MutationTree<PrinterState> = {
         Vue.set(state, 'status', status)
 
         //Look for job info
-        const job = new Job()
-        job.fileName = state.sourcemodel.job?.file.fileName
-        job.size = state.sourcemodel.job?.file.size
-        job.filePosition = state.sourcemodel.job.filePosition
-        job.duration = state.sourcemodel.job.duration
-        Vue.set(state, 'job', job)
+        if (payload.job?.file?.fileName) {
+            const job = new Job()
+            job.fileName = state.sourcemodel.job?.file?.fileName ?? ''
+            job.size = state.sourcemodel.job?.file.size
+            job.filePosition = state.sourcemodel.job.filePosition
+            job.duration = state.sourcemodel.job.duration
+            Vue.set(state, 'job', job)
+        }
     },
     /****************************************************************************/
     /*  KLIPPER */

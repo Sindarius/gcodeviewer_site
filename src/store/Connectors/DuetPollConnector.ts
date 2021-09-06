@@ -29,19 +29,22 @@ export default class DuetPollConnector extends BaseConnector {
     async poll() {
         if (!this.connected || this.store === null) return
 
-        const response = await axios.get(`${this.protocol}://${this.address}/rr_model?flags=d99fn`)
+        const response = await axios.get(`${this.protocol}://${this.address}/rr_model?flags=d99fv`)
         this.store.commit('printer/updateDuetModelData', response.data.result)
 
         //Get detailed moves
         const moves = await axios.get(`${this.protocol}://${this.address}/rr_model?key=move&flags=d99vn`)
         this.store.commit('printer/updateDuetModelData', { move: moves.data.result })
 
-        const job = await axios.get(`${this.protocol}://${this.address}/rr_model?key=move&flags=d99vn`)
+        const job = await axios.get(`${this.protocol}://${this.address}/rr_model?key=job&flags=d99vn`)
         this.store.commit('printer/updateDuetModelData', { job: job.data.result })
 
+        const count = 0
         this.pollInterval = setInterval(async () => {
             const response = await axios.get(`${this.protocol}://${this.address}/rr_model?flags=d99fn`)
             this.store?.commit('printer/updateDuetModelData', response.data.result)
+            const job = await axios.get(`${this.protocol}://${this.address}/rr_model?key=job&flags=d99vn`)
+            this.store?.commit('printer/updateDuetModelData', { job: job.data.result })
         }, 250)
     }
 
@@ -62,12 +65,12 @@ export default class DuetPollConnector extends BaseConnector {
         return result
     }
 
-    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
-        filename = encodeURIComponent(filename)
-        const response = await axios.get(`${this.protocol}://${this.address}/rr_download?name=${filename}`, {
+    async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
+        const encodedFilename = encodeURIComponent(filename)
+        const response = await axios.get(`${this.protocol}://${this.address}/rr_download?name=${encodedFilename}`, {
             onDownloadProgress: (progressEvent) => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                statusCallback(percentCompleted)
+                statusCallback(percentCompleted, `Downloading ${filename}`)
             }
         })
         return response.data
