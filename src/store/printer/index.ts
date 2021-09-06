@@ -6,13 +6,7 @@ import { getters } from './getters'
 
 export const getDefaultState = (): PrinterState => {
     return {
-        sourcemodel: {},
-        model: {},
-        motion: {
-            X: 0,
-            Y: 0,
-            Z: 0
-        }
+        sourcemodel: {}
     }
 }
 

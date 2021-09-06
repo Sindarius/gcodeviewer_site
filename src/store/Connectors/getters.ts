@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import { PrinterConnection } from './types'
+import { LastConnection, PrinterConnection } from './types'
 
 export const getters: GetterTree<PrinterConnection, any> = {
     isConnected(state) {
@@ -7,5 +7,10 @@ export const getters: GetterTree<PrinterConnection, any> = {
             return state.connection.connected
         }
         return false
+    },
+    getLastConnection(): LastConnection | null {
+        const lastConn = localStorage.getItem('lastConnection')
+        if (lastConn) return JSON.parse(lastConn)
+        return null
     }
 }

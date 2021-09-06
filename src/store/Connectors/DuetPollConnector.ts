@@ -1,9 +1,10 @@
 import axios from 'axios'
 import BaseConnector from './BaseConnector'
+import { ConnectionType } from './types'
 
 export default class DuetPollConnector extends BaseConnector {
     pollInterval = -1
-
+    connectionType = ConnectionType.rrf
     constructor(store: any) {
         super(store)
     }

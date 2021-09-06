@@ -1,7 +1,10 @@
 import axios from 'axios'
+import { ConnectionType } from './types'
 import BaseConnector from './BaseConnector'
 
 export default class DuetRestConnector extends BaseConnector {
+    connectionType = ConnectionType.rrf
+
     constructor(store: any) {
         super(store)
     }
@@ -18,18 +21,26 @@ export default class DuetRestConnector extends BaseConnector {
                 this.connected = true
             }
         } catch {
-            //ignore since most versions don't support this at this point
+            //ignore since most versions don't support this at this point - Need to look at adding SBC password support
         }
 
         try {
-            this.webSocket = new WebSocket(`${this.protocolWS}://${this.address}/machine`)
-            this.webSocket.onmessage = (e) => {
-                this.store?.commit('printer/updateDuetModelData', JSON.parse(e.data))
-                this.webSocket?.send('OK\n')
-            }
-            this.webSocket.onopen = (e) => {
-                this.connected = true
-            }
+            return new Promise((resolve, reject) => {
+                this.webSocket = new WebSocket(`${this.protocolWS}://${this.address}/machine`)
+                this.webSocket.onmessage = (e) => {
+                    this.store?.commit('printer/updateDuetModelData', JSON.parse(e.data))
+                    this.webSocket?.send('OK\n')
+                    resolve()
+                }
+                this.webSocket.onopen = (e) => {
+                    this.connected = true
+                    resolve()
+                }
+                this.webSocket.onerror = (e) => {
+                    this.connected = false
+                    resolve()
+                }
+            })
         } catch {
             this.connected = false
         }

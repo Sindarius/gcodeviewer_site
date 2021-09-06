@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import axios, { ResponseType } from 'axios'
+import axios, { Method, ResponseType } from 'axios'
 import { Store } from 'vuex'
+import { ConnectionType } from './types'
 
 export default class BaseConnector {
     protocol = 'http'
@@ -11,6 +12,7 @@ export default class BaseConnector {
     password = 'reprap'
     connected = false
     store: Store<any> | null
+    connectionType: ConnectionType = ConnectionType.rrf
 
     constructor(store: any) {
         this.store = store
@@ -27,5 +29,21 @@ export default class BaseConnector {
     disconnect(): void {
         this.connected = false
         this.store?.commit('printer/clear', {})
+        this.store?.commit('connections/clear', {})
+    }
+
+    timeToStr(time: Date): string {
+        let result = ''
+        result += time.getFullYear() + '-'
+        result += time.getMonth() + 1 + '-'
+        result += time.getDate() + 'T'
+        result += time.getHours() + ':'
+        result += time.getMinutes() + ':'
+        result += time.getSeconds()
+        return result
+    }
+
+    downloadFile(filename: string, statusCallback: (status: string) => void): void {
+        return
     }
 }

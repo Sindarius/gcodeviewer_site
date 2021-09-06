@@ -1,4 +1,4 @@
-import Vue from 'vue'
-export default class ViewerMixin extends Vue {
+import BaseMixin from './BaseMixin'
+export default class ViewerMixin extends BaseMixin {
     static viewer: any = null
 }
