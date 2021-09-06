@@ -1,11 +1,28 @@
 <template>
-    <v-row>
-        <v-col cols="2">
-            <v-img :contain="true" width="45" height="45" :src="getConnectionIcon"></v-img>
-        </v-col>
-        <v-col cols="3"> {{ address }} {{ status }} </v-col>
-    </v-row>
+    <div class="div-style mr-5">
+        <v-img :contain="true" width="45" height="45" class="align-text mr-3" :src="getConnectionIcon"></v-img>
+        <span class="address-text">{{ address }} {{ status }}</span>
+    </div>
 </template>
+
+<style scoped>
+.div-style {
+    align-content: center;
+    text-align: center;
+    vertical-align: middle;
+}
+.align-text {
+    display: inline-block;
+    align-content: center;
+    vertical-align: middle;
+}
+.address-text {
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    vertical-align: middle;
+}
+</style>
 
 <script lang="ts">
 import { PrinterStatus } from '@/store/printer/types'

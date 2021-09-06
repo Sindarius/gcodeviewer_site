@@ -75,7 +75,7 @@ export const mutations: MutationTree<PrinterState> = {
                 const buildVolume: BuildVolume[] = []
                 buildVolume.push(new BuildVolume('X', Number.parseFloat(payload.configfile.config.stepper_x.position_endstop), Number.parseFloat(payload.configfile.config.stepper_x.position_max)))
                 buildVolume.push(new BuildVolume('Y', Number.parseFloat(payload.configfile.config.stepper_y.position_endstop), Number.parseFloat(payload.configfile.config.stepper_y.position_max)))
-                buildVolume.push(new BuildVolume('X', payload.configfile.config.stepper_z.position_endstop, payload.configfile.config.stepper_z.position_max))
+                buildVolume.push(new BuildVolume('Z', Number.parseFloat(payload.configfile.config.stepper_z.position_endstop), Number.parseFloat(payload.configfile.config.stepper_z.position_max)))
                 const match = state.buildVolume.every((value, index) => value.min === state.buildVolume[index].min && value.max === state.buildVolume[index].max)
                 if (buildVolume.length != state.buildVolume.length || !match) {
                     Vue.set(state, 'buildVolume', buildVolume)

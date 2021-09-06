@@ -74,6 +74,7 @@ export default class Viewer extends ViewerMixin {
 
     @Watch('buildVolume', { deep: true })
     buildVolumeChanged(to: BuildVolume[]): void {
+        console.log(to)
         for (var axesIdx in to) {
             let axes = to[axesIdx]
             if ('XYZ'.includes(axes.axes)) {
@@ -83,6 +84,7 @@ export default class Viewer extends ViewerMixin {
             }
         }
         Viewer.viewer.bed.commitBedSize()
+        console.log(Viewer.viewer.bed)
         Viewer.viewer.reload()
     }
 
