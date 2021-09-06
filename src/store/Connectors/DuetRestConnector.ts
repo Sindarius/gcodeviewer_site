@@ -51,14 +51,14 @@ export default class DuetRestConnector extends BaseConnector {
         super.disconnect()
     }
 
-    timeToStr(time: Date): string {
-        let result = ''
-        result += time.getFullYear() + '-'
-        result += time.getMonth() + 1 + '-'
-        result += time.getDate() + 'T'
-        result += time.getHours() + ':'
-        result += time.getMinutes() + ':'
-        result += time.getSeconds()
-        return result
+    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
+        filename = encodeURIComponent(filename)
+        const response = await axios.get(`${this.protocol}://${this.address}/machine/file/${filename}`, {
+            onDownloadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                statusCallback(percentCompleted)
+            }
+        })
+        return response.data
     }
 }

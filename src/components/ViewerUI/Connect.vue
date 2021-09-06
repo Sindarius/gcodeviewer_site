@@ -1,30 +1,32 @@
 <template>
     <v-dialog v-model="showDialog" max-width="400">
         <v-card>
-            <v-card-title>Connect To...</v-card-title>
-            <v-card-text>
-                <v-row>
-                    <v-col cols="12" v-show="error.length > 0">
-                        {{ error }}
-                    </v-col>
-                    <v-col cols="12">
-                        <v-btn-toggle v-model="connectionType" mandatory dense>
-                            <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/duet.png')"></v-img> RRF/Duet</v-btn>
-                            <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/klipper.png')"></v-img> Klipper</v-btn>
-                        </v-btn-toggle>
-                    </v-col>
-                    <v-col cols="12">
-                        <v-text-field hint="Address" :persistent-hint="true" v-model="address"></v-text-field>
-                        <v-text-field v-show="connectionType === 0" hint="Password (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
-                        <v-text-field v-show="connectionType === 1" hint="API Key (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
-                    </v-col>
-                </v-row>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn :loading="busy" color="info" @click="connect">Connect</v-btn>
-                <v-btn :disabled="busy" color="error" @click="cancel">Cancel</v-btn>
-            </v-card-actions>
+            <v-form @submit.prevent="connect">
+                <v-card-title>Connect To...</v-card-title>
+                <v-card-text>
+                    <v-row>
+                        <v-col cols="12" v-show="error.length > 0">
+                            {{ error }}
+                        </v-col>
+                        <v-col cols="12">
+                            <v-btn-toggle v-model="connectionType" mandatory dense>
+                                <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/duet.png')"></v-img> RRF/Duet</v-btn>
+                                <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/klipper.png')"></v-img> Klipper</v-btn>
+                            </v-btn-toggle>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field hint="Address" :persistent-hint="true" v-model="address"></v-text-field>
+                            <v-text-field v-show="connectionType === 0" hint="Password (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
+                            <v-text-field v-show="connectionType === 1" hint="API Key (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn :loading="busy" color="info" type="submit">Connect</v-btn>
+                    <v-btn :disabled="busy" color="error" @click="cancel">Cancel</v-btn>
+                </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
 </template>

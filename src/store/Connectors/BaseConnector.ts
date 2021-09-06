@@ -12,7 +12,7 @@ export default class BaseConnector {
     password = 'reprap'
     connected = false
     store: Store<any> | null
-    connectionType: ConnectionType = ConnectionType.rrf
+    connectionType: ConnectionType = ConnectionType.unknown
 
     constructor(store: any) {
         this.store = store
@@ -43,7 +43,7 @@ export default class BaseConnector {
         return result
     }
 
-    downloadFile(filename: string, statusCallback: (status: string) => void): void {
-        return
+    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
+        return ''
     }
 }

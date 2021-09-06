@@ -1,8 +1,9 @@
 export interface PrinterState {
     sourcemodel: any
+    buildVolume: BuildVolume[]
     motion?: PrinterStateMotion
     status?: PrinterStatus
-    buildVolumne?: BuildVolume
+    job?: Job
 }
 
 export interface PrinterStateMotion {
@@ -27,6 +28,13 @@ export class BuildVolume {
     axes = ''
     min = 0
     max = 100
+}
+
+export class Job {
+    filePosition? = 0
+    duration? = 0
+    fileName? = ''
+    size? = 0
 }
 
 export interface PrinterStatePrinting {

@@ -1,4 +1,5 @@
 import { GetterTree } from 'vuex'
+import { connections } from '.'
 import { LastConnection, PrinterConnection } from './types'
 
 export const getters: GetterTree<PrinterConnection, any> = {

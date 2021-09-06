@@ -61,4 +61,15 @@ export default class DuetPollConnector extends BaseConnector {
         result += time.getSeconds()
         return result
     }
+
+    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
+        filename = encodeURIComponent(filename)
+        const response = await axios.get(`${this.protocol}://${this.address}/rr_download?name=${filename}`, {
+            onDownloadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                statusCallback(percentCompleted)
+            }
+        })
+        return response.data
+    }
 }

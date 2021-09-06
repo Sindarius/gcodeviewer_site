@@ -10,10 +10,11 @@ export class LastConnection {
         this.connectionType = connectionType
     }
     address = ''
-    connectionType: ConnectionType = ConnectionType.rrf
+    connectionType: ConnectionType = ConnectionType.unknown
 }
 
 export enum ConnectionType {
     rrf,
-    klipper
+    klipper,
+    unknown
 }

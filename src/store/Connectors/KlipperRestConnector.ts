@@ -38,6 +38,9 @@ export default class KlipperRestConnector extends BaseConnector {
         //const data = await axios.get(`${this.protocol}://${this.address}/printer/objects/list`)
         //console.log(data.data)
 
+        const stats = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?configfile&webhooks&motion_report&virtual_sdcard&display_status`)
+        this.store?.commit('printer/updateKlipperModelData', stats.data.result.status)
+
         return new Promise((resolve) => {
             /*
             console.log(socketAddress)
@@ -66,7 +69,19 @@ export default class KlipperRestConnector extends BaseConnector {
 
     disconnect() {
         clearInterval(this.pollInterval)
+        this.pollInterval = -1
         //this.webSocket?.close()
         super.disconnect()
+    }
+
+    async downloadFile(filename: string, statusCallback: (status: number) => void | null): Promise<string> {
+        filename = filename.replace('/home/pi/gcode_files', '')
+        const response = await axios.get(`${this.protocol}://${this.address}/server/files/gcodes${filename}`, {
+            onDownloadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                statusCallback(percentCompleted)
+            }
+        })
+        return response.data
     }
 }

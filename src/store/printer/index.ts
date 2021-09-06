@@ -1,12 +1,13 @@
 import { Module } from 'vuex'
-import { PrinterState, PrinterStateMotion } from './types'
+import { BuildVolume, PrinterState, PrinterStateMotion } from './types'
 import { actions } from './actions'
 import { mutations } from './mutations'
 import { getters } from './getters'
 
 export const getDefaultState = (): PrinterState => {
     return {
-        sourcemodel: {}
+        sourcemodel: {},
+        buildVolume: [new BuildVolume('X', 0, 235), new BuildVolume('Y', 0, 250), new BuildVolume('Z', 0, 200)]
     }
 }
 
