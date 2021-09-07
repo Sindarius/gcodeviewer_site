@@ -43,6 +43,9 @@ export const mutations: MutationTree<PrinterState> = {
                 break
             case 'processing':
                 status = PrinterStatus.Printing
+                if (state.job) {
+                    Vue.set(state.job, 'filePosition', state.sourcemodel.job.filePosition)
+                }
                 break
             case 'error':
                 status = PrinterStatus.Error
@@ -52,6 +55,9 @@ export const mutations: MutationTree<PrinterState> = {
                 break
             case 'simulating':
                 status = PrinterStatus.Simulating
+                if (state.job) {
+                    Vue.set(state.job, 'filePosition', state.sourcemodel.job.filePosition)
+                }
                 break
         }
         Vue.set(state, 'status', status)

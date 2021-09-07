@@ -5,6 +5,8 @@
         </v-card-title>
         <v-card-text>
             <color-picker v-model="toolColor"></color-picker>
+            <v-select hint="Type" persistent-hint :items="toolTypes" v-model="toolType"></v-select>
+            <v-text-field hint="Diameter" type="number" persistent-hint v-model="toolDiameter"></v-text-field>
         </v-card-text>
     </v-card>
 </template>
@@ -25,12 +27,32 @@ import ColorPicker from './ColorPicker.vue'
 export default class ToolCard extends ViewerMixin {
     @Prop() tool!: Tool
     @Prop() toolIndex!: number
+    toolTypes = ['Extruder', 'Endmill']
 
     get toolColor(): string {
         return this.tool.color
     }
     set toolColor(value: string) {
         this.tool.color = value
+    }
+
+    get toolType(): string {
+        return this.tool.toolType
+    }
+
+    set toolType(value: string) {
+        this.tool.toolType = value
+    }
+
+    get toolDiameter(): number {
+        return this.tool.diameter
+    }
+
+    set toolDiameter(value: number) {
+        if (!isNaN(value)) {
+            this.tool.diameter = value
+        }
+        this.tool.diameter = 0.4
     }
 }
 </script>

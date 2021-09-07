@@ -64,7 +64,8 @@ export default {
             qtyerror: 'The number of tools must be between 1 and 10'
         },
         toolbar: {
-            toolstitle: 'Edit Tools'
+            toolstitle: 'Edit Tools',
+            download: 'Download'
         }
     }
 }

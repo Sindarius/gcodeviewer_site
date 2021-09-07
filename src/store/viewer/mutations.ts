@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { MutationTree } from 'vuex'
-import { Viewer } from './types'
+import { Viewer, Tool } from './types'
 
 export const mutations: MutationTree<Viewer> = {
     updateCurrentFile(state, payload) {
@@ -8,5 +8,9 @@ export const mutations: MutationTree<Viewer> = {
     },
     liveTracking(state, payload) {
         Vue.set(state, 'liveTracking', payload)
+    },
+    saveTools(state, payload: Tool[]) {
+        Vue.set(state, 'tools', payload)
+        localStorage.setItem('tools', JSON.stringify(payload))
     }
 }

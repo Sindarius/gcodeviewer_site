@@ -69,10 +69,6 @@ export default class App extends Vue {
         return this.$store.getters['connections/isConnected']
     }
 
-    updateStatus(status: number): void {
-        console.log(status)
-    }
-
     async downloadTest(): Promise<void> {
         this.$eventHub.$emit('trackCurrentJob')
     }

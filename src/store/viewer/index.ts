@@ -7,12 +7,23 @@ import { actions } from './actions'
 // @ts-ignore
 import { ToolType } from '@sindarius/gcodeviewer'
 
+export const getDefaultTools = (): Tool[] => {
+    const toolString = localStorage.getItem('tools')
+    if (toolString) {
+        const results = JSON.parse(toolString)
+        if (results.length !== 0) {
+            return results
+        }
+    }
+    return [new Tool('#00FFFF', 0.4, ToolType.Extruder), new Tool('#FF00FF', 0.4, ToolType.Extruder), new Tool('#FFFF00', 0.4, ToolType.Extruder), new Tool('#000000', 0.4, ToolType.Extruder), new Tool('#FFFFFF', 0.4, ToolType.Extruder)]
+}
+
 export const getDefaultState = (): Viewer => {
     return {
         currentFileName: null,
         liveTracking: false,
         fileData: null,
-        tools: [new Tool('#00FFFF', 0.4, ToolType.Extruder), new Tool('#FF00FF', 0.4, ToolType.Extruder), new Tool('#FFFFFF', 0.4, ToolType.Extruder), new Tool('#000000', 0.4, ToolType.Extruder), new Tool('#FFFFFF', 0.4, ToolType.Extruder)]
+        tools: getDefaultTools()
     }
 }
 

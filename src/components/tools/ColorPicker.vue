@@ -23,11 +23,11 @@
 'use strict'
 
 import Vue from 'vue'
-import { Component, Model, Watch } from 'vue-property-decorator'
+import { Component, ModelSync, Watch } from 'vue-property-decorator'
 
 @Component
 export default class ColorPicker extends Vue {
-    @Model() editcolor!: string
+    @ModelSync('editorcolor', 'change') editcolormodel!: string
     internalTextColor = '#000000'
     color = '#000000'
     menu = false
@@ -48,8 +48,8 @@ export default class ColorPicker extends Vue {
         }
     }
     mounted(): void {
-        this.color = this.editcolor
-        this.internalTextColor = this.editcolor
+        this.color = this.editcolormodel
+        this.internalTextColor = this.editcolormodel
     }
 
     updateValue(val: string): void {
@@ -59,7 +59,7 @@ export default class ColorPicker extends Vue {
         }
         this.color = this.color.toUpperCase().padEnd(7, '0').substring(0, 7)
         this.internalTextColor = this.color
-        this.$emit('updatecolor', this.color)
+        this.$emit('change', this.color)
     }
 
     @Watch('editcolor') editColorChanged(to: string): void {

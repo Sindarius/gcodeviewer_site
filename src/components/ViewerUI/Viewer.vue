@@ -19,7 +19,7 @@
 }
 .progress-position {
     position: absolute;
-    top: 5px;
+    bottom: 5px;
     left: 50px;
     width: calc(100% - 100px);
 }
@@ -35,13 +35,15 @@
 <script lang="ts">
 // @ts-ignore
 import GCodeViewer from '@sindarius/gcodeviewer'
-import { Component, Ref, Watch } from 'vue-property-decorator'
+import { Component, Ref, Watch, Mixins } from 'vue-property-decorator'
 import ViewerMixin from '@/components/mixin/ViewerMixin'
 import { BuildVolume, PrinterStateMotion } from '@/store/printer/types'
 import { Viewer as ViewerState } from '@/store/viewer/types'
 
+let viewer!: any
+
 @Component
-export default class Viewer extends ViewerMixin {
+export default class Viewer extends Mixins(ViewerMixin) {
     @Ref('viewercanvas') viewercanvas!: HTMLCanvasElement
     trackJob = false
     downloading = false
@@ -58,13 +60,18 @@ export default class Viewer extends ViewerMixin {
             this.disconnect()
         })
 
+        this.$eventHub.$on('openLocalFile', async (filename: string) => {
+            await this.openLocalFile(filename)
+        })
+
         //initialize
-        if (!Viewer.viewer === null) return
-        Viewer.viewer = new GCodeViewer(this.viewercanvas)
-        Viewer.viewer.init()
-        Viewer.viewer.setCursorVisiblity(true)
+        if (viewer) return
+        viewer = new GCodeViewer(this.viewercanvas)
+        this.setGCodeViewer(viewer)
+        viewer.init()
+        viewer.setCursorVisiblity(true)
         window.onresize = () => {
-            Viewer.viewer.resize()
+            viewer.resize()
         }
     }
 
@@ -92,7 +99,7 @@ export default class Viewer extends ViewerMixin {
     @Watch('currentFilePosition')
     currentFilePositionUpdated(to: number): void {
         if (this.trackJob) {
-            Viewer.viewer.gcodeProcessor.updateFilePosition(to)
+            viewer.gcodeProcessor.updateFilePosition(to)
         }
     }
 
@@ -102,7 +109,7 @@ export default class Viewer extends ViewerMixin {
 
     @Watch('cursorPosition')
     cursorPositionChanged(to: PrinterStateMotion): void {
-        Viewer.viewer?.updateToolPosition(to)
+        viewer?.updateToolPosition(to)
     }
 
     @Watch('buildVolume', { deep: true })
@@ -111,12 +118,12 @@ export default class Viewer extends ViewerMixin {
             let axes = to[axesIdx]
             if ('XYZ'.includes(axes.axes)) {
                 var letter = axes.axes.toLowerCase()
-                Viewer.viewer.bed.buildVolume[letter].min = axes.min
-                Viewer.viewer.bed.buildVolume[letter].max = axes.max
+                viewer.bed.buildVolume[letter].min = axes.min
+                viewer.bed.buildVolume[letter].max = axes.max
             }
         }
-        Viewer.viewer.bed.commitBedSize()
-        Viewer.viewer.reload()
+        viewer.bed.commitBedSize()
+        viewer.reload()
     }
 
     updatePercent(status: number, message: string): void {
@@ -129,19 +136,30 @@ export default class Viewer extends ViewerMixin {
             this.downloading = true
             let file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
-                Viewer.viewer.updateRenderQuality(5)
                 this.downloading = false
                 this.progressPercent = 0
-                await Viewer.viewer.processFile(file)
-                Viewer.viewer.gcodeProcessor.forceRedraw()
+                this.beforePrint()
+                await viewer.processFile(file)
+                viewer.gcodeProcessor.forceRedraw()
                 this.trackJob = true
             }
             this.downloading = false
         }
     }
 
+    async openLocalFile(filename: any): Promise<void> {
+        if (!filename) return
+        const reader = new FileReader()
+        reader.addEventListener('load', async (event) => {
+            const blob = event?.target?.result
+            this.beforePrint()
+            await viewer.processFile(blob)
+        })
+        reader.readAsText(filename)
+    }
+
     disconnect(): void {
-        Viewer.viewer.clearScene(true)
+        viewer.clearScene(true)
     }
 }
 </script>
