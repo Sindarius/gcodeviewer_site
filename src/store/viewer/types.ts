@@ -7,6 +7,7 @@ export interface Viewer {
     fileData: string | null
     showProgress: boolean
     tools: Tool[]
+    reloadRequired: boolean
 }
 
 export class Tool {

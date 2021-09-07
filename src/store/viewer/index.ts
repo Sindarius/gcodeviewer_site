@@ -28,7 +28,8 @@ export const getDefaultState = (): Viewer => {
         liveTracking: false,
         fileData: null,
         showProgress: false,
-        tools: getDefaultTools()
+        tools: getDefaultTools(),
+        reloadRequired: false
     }
 }
 

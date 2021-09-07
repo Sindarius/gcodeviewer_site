@@ -15,5 +15,8 @@ export const mutations: MutationTree<Viewer> = {
     },
     showProgress(state, payload: boolean) {
         Vue.set(state, 'showProgress', payload)
+    },
+    reloadRequired(state, payload: boolean) {
+        Vue.set(state, 'reloadRequired', payload)
     }
 }

@@ -2,8 +2,6 @@ import Vue from 'vue'
 import { MutationTree } from 'vuex'
 import { Axes, BuildVolume, Job, PrinterState, PrinterStatus } from './types'
 import merge from 'lodash.merge'
-import axios from 'axios'
-import { getDefaultState } from '../connectors'
 
 export const mutations: MutationTree<PrinterState> = {
     /****************************************************************************/

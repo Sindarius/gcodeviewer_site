@@ -42,22 +42,6 @@ export default class KlipperRestConnector extends BaseConnector {
         this.store?.commit('printer/updateKlipperModelData', stats.data.result.status)
 
         return new Promise((resolve) => {
-            /*
-            console.log(socketAddress)
-            this.webSocket = new WebSocket(socketAddress)
-            this.webSocket.onmessage = (e) => {
-                this.connected = true
-                this.store?.commit('printer/updateKlipperModelData', JSON.parse(e.data))
-                resolve()
-            }
-            this.webSocket.onerror = (e) => {
-                console.log('error')
-                console.log(e)
-                this.disconnect()
-                resolve()
-            }
-            */
-
             this.pollInterval = setInterval(async () => {
                 const response = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?motion_report&virtual_sdcard&display_status`)
                 this.store?.commit('printer/updateKlipperModelData', response.data.result.status)

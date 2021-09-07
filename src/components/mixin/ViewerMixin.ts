@@ -36,7 +36,24 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/updateCurrentFile', value)
     }
 
+    get liveTracking(): boolean {
+        return this.$store.state.viewer.liveTracking
+    }
+
+    set liveTracking(value: boolean) {
+        this.$store.commit('viewer/liveTracking', value)
+    }
+
+    get reloadRequired(): boolean {
+        return this.$store.state.viewer.reloadRequired
+    }
+
+    set reloadRequired(value: boolean) {
+        this.$store.commit('viewer/reloadRequired', value)
+    }
+
     async reloadViewer(): Promise<void> {
+        this.reloadRequired = false
         this.showProgress = true
         gcodeViewer.gcodeProcessor.cancelLoad = true
         await new Promise((resolve) => setTimeout(resolve, 500))

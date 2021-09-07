@@ -33,18 +33,19 @@
 </style>
 
 <script lang="ts">
-import { Component, PropSync, Watch } from 'vue-property-decorator'
+import { Component, PropSync, Watch, Mixins } from 'vue-property-decorator'
 import ViewerMixin from '../mixin/ViewerMixin'
 import ToolCard from './ToolCard.vue'
 import { Tool } from '@/store/viewer/types'
 import { getDefaultTools, resetTools } from '@/store/viewer'
+import { TranslateResult } from 'vue-i18n'
 
 @Component({
     components: {
         ToolCard
     }
 })
-export default class ToolsDialog extends ViewerMixin {
+export default class ToolsDialog extends Mixins(ViewerMixin) {
     @PropSync('show', { type: Boolean }) private showDialog!: boolean
     editTools: Tool[] = []
     toolQty = 1
@@ -65,6 +66,9 @@ export default class ToolsDialog extends ViewerMixin {
 
     save(): void {
         this.$store.commit('viewer/saveTools', this.editTools)
+        if (this.currentFileName) {
+            this.reloadRequired = true
+        }
         this.showDialog = false
     }
 
@@ -73,7 +77,7 @@ export default class ToolsDialog extends ViewerMixin {
         this.reset()
     }
 
-    numberRule(v: any): any {
+    numberRule(v: any): boolean | string | TranslateResult {
         let val = parseInt(v)
         if (!isNaN(val) && val >= 1 && val <= 10) return true
         return this.$t('viewer.tools.qtyerror')

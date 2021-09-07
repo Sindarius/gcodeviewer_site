@@ -7,7 +7,7 @@
             </template>
         </v-progress-linear>
 
-        <div class="scrubber" v-show="!trackJob && scrubFileSize > 0">
+        <div class="scrubber" v-show="!liveTracking && scrubFileSize > 0">
             <v-row>
                 <v-col cols="11" md="9">
                     <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
@@ -76,7 +76,6 @@ let viewer!: any
 @Component
 export default class Viewer extends Mixins(ViewerMixin) {
     @Ref('viewercanvas') viewercanvas!: HTMLCanvasElement
-    trackJob = false
     progressPercent = 0
     message = ''
     scrubPosition = 0
@@ -136,7 +135,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     @Watch('currentFilePosition')
     currentFilePositionUpdated(to: number): void {
-        if (this.trackJob) {
+        if (this.liveTracking) {
             viewer.gcodeProcessor.updateFilePosition(to)
         }
     }
@@ -180,7 +179,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
                 await viewer.processFile(file)
                 viewer.gcodeProcessor.forceRedraw()
                 this.scrubFileSize = viewer.fileSize
-                this.trackJob = true
+                this.liveTracking = true
                 this.showProgress = false
             }
             this.showProgress = false
@@ -207,7 +206,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     }
 
     @Watch('scrubPosition') scrubPositionChanged(to: number): void {
-        if (!this.trackJob) {
+        if (!this.liveTracking) {
             viewer.gcodeProcessor.updateFilePosition(to)
         }
     }
