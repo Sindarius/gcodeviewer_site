@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar app color="primary" dark dense>
+        <v-app-bar app color="primary" dense>
             <Status></Status>
             <v-btn @click="downloadTest">Download</v-btn>
             <v-btn @click="dumpState">State</v-btn>

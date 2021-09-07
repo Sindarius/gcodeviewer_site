@@ -6,6 +6,29 @@
                 <strong class="progress-text">{{ Math.ceil(value) }}% {{ message }} </strong>
             </template>
         </v-progress-linear>
+
+        <div class="scrubber" v-show="!trackJob && scrubFileSize > 0">
+            <v-row>
+                <v-col cols="11" md="9">
+                    <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
+                </v-col>
+                <v-col cols="1">
+                    <v-btn @click="scrubPlaying = !scrubPlaying">
+                        <v-icon v-if="scrubPlaying">mdi-stop</v-icon>
+                        <v-icon v-else>mdi-play</v-icon>
+                    </v-btn>
+                </v-col>
+                <v-col cols="12" md="2">
+                    <v-btn-toggle dense mandatory rounded v-model="scrubSpeed">
+                        <v-btn :value="1">1x</v-btn>
+                        <v-btn :value="2">2x</v-btn>
+                        <v-btn :value="5">5x</v-btn>
+                        <v-btn :value="10">10x</v-btn>
+                        <v-btn :value="20">20x</v-btn>
+                    </v-btn-toggle>
+                </v-col>
+            </v-row>
+        </div>
     </div>
 </template>
 
@@ -30,6 +53,14 @@
 .disable-transition {
     transition: none !important;
 }
+
+.scrubber {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 5px;
+    z-index: 19 !important;
+}
 </style>
 
 <script lang="ts">
@@ -48,6 +79,11 @@ export default class Viewer extends Mixins(ViewerMixin) {
     trackJob = false
     progressPercent = 0
     message = ''
+    scrubPosition = 0
+    scrubPlaying = false
+    scrubSpeed = 1
+    scrubInterval = -1
+    scrubFileSize = 0
 
     mounted(): void {
         //register events
@@ -59,8 +95,8 @@ export default class Viewer extends Mixins(ViewerMixin) {
             this.disconnect()
         })
 
-        this.$eventHub.$on('openLocalFile', async (filename: string) => {
-            await this.openLocalFile(filename)
+        this.$eventHub.$on('openLocalFile', async (file: File) => {
+            await this.openLocalFile(file)
         })
 
         //initialize
@@ -79,6 +115,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     beforeDestroy(): void {
         this.$eventHub.$off('trackCurrentJob')
         this.$eventHub.$off('disconnect')
+        this.$eventHub.$off('openLocalFile')
     }
 
     get cursorPosition(): PrinterStateMotion {
@@ -135,12 +172,14 @@ export default class Viewer extends Mixins(ViewerMixin) {
     async trackCurrentJob(): Promise<void> {
         if (this.currentJob) {
             this.showProgress = true
+            this.currentFileName = this.currentJob
             let file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
                 this.progressPercent = 0
                 this.beforePrint()
                 await viewer.processFile(file)
                 viewer.gcodeProcessor.forceRedraw()
+                this.scrubFileSize = viewer.fileSize
                 this.trackJob = true
                 this.showProgress = false
             }
@@ -148,21 +187,46 @@ export default class Viewer extends Mixins(ViewerMixin) {
         }
     }
 
-    async openLocalFile(filename: any): Promise<void> {
-        if (!filename) return
+    async openLocalFile(file: File): Promise<void> {
+        if (!file) return
         const reader = new FileReader()
         this.showProgress = true
+        this.currentFileName = `${file.name}`
         reader.addEventListener('load', async (event) => {
             const blob = event?.target?.result
             this.beforePrint()
             await viewer.processFile(blob)
+            this.scrubFileSize = viewer.fileSize
             this.showProgress = false
         })
-        reader.readAsText(filename)
+        reader.readAsText(file)
     }
 
     disconnect(): void {
         viewer.clearScene(true)
+    }
+
+    @Watch('scrubPosition') scrubPositionChanged(to: number): void {
+        if (!this.trackJob) {
+            viewer.gcodeProcessor.updateFilePosition(to)
+        }
+    }
+
+    @Watch('scrubPlaying') scrubPlayingChanaged(to: boolean): void {
+        if (to) {
+            viewer.gcodeProcessor.updateFilePosition(this.scrubPosition - 30000)
+            this.scrubInterval = setInterval(() => {
+                if (this.scrubPlaying) {
+                    this.scrubPosition += 100 * this.scrubSpeed
+                    viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
+                }
+            }, 200)
+        } else {
+            if (this.scrubInterval > -1) {
+                clearInterval(this.scrubInterval)
+            }
+            this.scrubInterval = -1
+        }
     }
 }
 </script>

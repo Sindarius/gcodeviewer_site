@@ -1,10 +1,10 @@
 <template>
     <div>
         <v-btn-toggle class="toggle-align" dense v-model="selectedButton" multiple>
-            <v-btn @click="showFileSelect" :title="$t('viewer.toolbar.openlocal')"><v-icon>mdi-folder-outline</v-icon></v-btn>
-            <v-btn @click="showToolsDialog = true" :title="$t('viewer.toolbar.toolstitle')"><v-icon>mdi-printer-3d-nozzle-outline</v-icon></v-btn>
-            <v-btn @click="reloadViewer" :title="$t('viewer.toolbar.reloadViewer')"><v-icon>mdi-reload</v-icon></v-btn>
-            <v-btn @click="resetCamera" :title="$t('viewer.toolbar.resetCamera')"><v-icon>mdi-camera-outline</v-icon></v-btn>
+            <ToolbarItem @click="showFileSelect" :title="$t('viewer.toolbar.openlocal')" icon="mdi-folder-outline"></ToolbarItem>
+            <ToolbarItem @click="showToolsDialog = true" :title="$t('viewer.toolbar.toolstitle')" icon="mdi-printer-3d-nozzle-outline"></ToolbarItem>
+            <ToolbarItem @click="reloadViewer" :title="$t('viewer.toolbar.reloadViewer')" icon="mdi-reload"></ToolbarItem>
+            <ToolbarItem @click="resetCamera" :title="$t('viewer.toolbar.resetCamera')" icon="mdi-camera-outline"></ToolbarItem>
         </v-btn-toggle>
         <tools-dialog :show.sync="showToolsDialog"></tools-dialog>
         <input ref="fileInput" type="file" :accept="'.g,.gcode,.gc,.gco,.nc,.ngc,.tap'" hidden @change="fileSelected" />
@@ -28,10 +28,12 @@
 import ToolsDialog from '@/components/tools/ToolsDialog.vue'
 import ViewerMixin from '../mixin/ViewerMixin'
 import { Component, Ref, Mixins, Watch } from 'vue-property-decorator'
+import ToolbarItem from './ToolbarItem.vue'
 
 @Component({
     components: {
-        ToolsDialog
+        ToolsDialog,
+        ToolbarItem
     }
 })
 export default class Toolbar extends Mixins(ViewerMixin) {

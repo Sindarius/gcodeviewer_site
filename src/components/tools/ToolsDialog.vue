@@ -64,7 +64,6 @@ export default class ToolsDialog extends ViewerMixin {
     }
 
     save(): void {
-        console.log(this.editTools)
         this.$store.commit('viewer/saveTools', this.editTools)
         this.showDialog = false
     }

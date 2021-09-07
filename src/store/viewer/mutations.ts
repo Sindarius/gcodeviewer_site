@@ -4,7 +4,7 @@ import { Viewer, Tool } from './types'
 
 export const mutations: MutationTree<Viewer> = {
     updateCurrentFile(state, payload) {
-        Vue.set(state, 'currentFile', payload)
+        Vue.set(state, 'currentFileName', payload)
     },
     liveTracking(state, payload) {
         Vue.set(state, 'liveTracking', payload)

@@ -28,6 +28,14 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/showProgress', value)
     }
 
+    get currentFileName(): string {
+        return this.$store.state.viewer.currentFileName
+    }
+
+    set currentFileName(value: string) {
+        this.$store.commit('viewer/updateCurrentFile', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.showProgress = true
         gcodeViewer.gcodeProcessor.cancelLoad = true
@@ -44,7 +52,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType) //hard code the nozzle size for now.
-            console.log(tool.diameter)
         }
     }
 

@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card outlined rounded="10">
         <v-card-title>
             <strong>{{ $t('') }} #{{ toolIndex }}</strong>
         </v-card-title>

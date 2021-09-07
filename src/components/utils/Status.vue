@@ -1,6 +1,6 @@
 <template>
     <div class="div-style mr-5">
-        <span v-if="getConnectionIcon === ''" class="address-text">Disconnected</span>
+        <span v-if="getConnectionIcon === ''" class="address-text">Sindarius G-Code Viewer</span>
         <span>
             <v-img :contain="true" width="45" height="45" class="align-text mr-3" :src="getConnectionIcon"></v-img>
             <span class="address-text">{{ address }} {{ status }}</span>
