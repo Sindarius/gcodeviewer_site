@@ -12,6 +12,7 @@
         <v-main class="main-relative">
             <Viewer />
             <Connect :show.sync="showConnectionDialog"></Connect>
+            <Toolbar class="toolbar"></Toolbar>
         </v-main>
     </v-app>
 </template>
@@ -21,6 +22,12 @@
     position: relative;
     background-color: orange;
 }
+
+.toolbar {
+    position: relative;
+    left: 50%;
+    float: left;
+}
 </style>
 
 <script lang="ts">
@@ -29,18 +36,22 @@ import { Component } from 'vue-property-decorator'
 import Viewer from '@/components/ViewerUI/Viewer.vue'
 import Connect from '@/components/ViewerUI/Connect.vue'
 import Status from '@/components/utils/Status.vue'
+import Toolbar from '@/components/Toolbars/Toolbar.vue'
 import BaseConnector from './store/connectors/BaseConnector'
+
 import { PrinterStateMotion, PrinterStatus } from './store/printer/types'
 
 @Component({
     components: {
         Viewer,
         Connect,
-        Status
+        Status,
+        Toolbar
     }
 })
 export default class App extends Vue {
     showConnectionDialog = false
+    showToolsDialog = false
 
     get connection(): BaseConnector {
         return this.$store.state.connections.connection

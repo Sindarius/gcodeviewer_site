@@ -125,7 +125,7 @@ export default class Viewer extends ViewerMixin {
     }
 
     async trackCurrentJob(): Promise<void> {
-        if (this.currentJob !== null) {
+        if (this.currentJob) {
             this.downloading = true
             let file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
