@@ -18,6 +18,10 @@ export const getDefaultTools = (): Tool[] => {
     return [new Tool('#00FFFF', 0.4, ToolType.Extruder), new Tool('#FF00FF', 0.4, ToolType.Extruder), new Tool('#FFFF00', 0.4, ToolType.Extruder), new Tool('#000000', 0.4, ToolType.Extruder), new Tool('#FFFFFF', 0.4, ToolType.Extruder)]
 }
 
+export const resetTools = (): Tool[] => {
+    return [new Tool('#00FFFF', 0.4, ToolType.Extruder), new Tool('#FF00FF', 0.4, ToolType.Extruder), new Tool('#FFFF00', 0.4, ToolType.Extruder), new Tool('#000000', 0.4, ToolType.Extruder), new Tool('#FFFFFF', 0.4, ToolType.Extruder)]
+}
+
 export const getDefaultState = (): Viewer => {
     return {
         currentFileName: null,

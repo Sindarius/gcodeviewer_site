@@ -22,7 +22,9 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     }
 
     async reloadViewer(): Promise<void> {
-        console.log(gcodeViewer)
+        gcodeViewer.gcodeProcessor.cancelLoad = true
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        this.beforePrint()
         await gcodeViewer.reload()
     }
 

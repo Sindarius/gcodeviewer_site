@@ -10,13 +10,14 @@
             </v-card-title>
             <v-card-text>
                 <v-row>
-                    <v-col cols="12" md="4" v-for="(tool, index) in tools" :key="tool.id">
+                    <v-col cols="12" md="4" v-for="(tool, index) in editTools" :key="tool.id">
                         <ToolCard :tool="tool" :toolIndex="index"> </ToolCard>
                     </v-col>
                 </v-row>
             </v-card-text>
             <v-card-actions>
                 <v-btn color="warning" @click="reset"> {{ $t('default.reset') }} </v-btn>
+                <v-btn color="warning" @click="loadDefault"> {{ $t('default.default') }} </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="info" @click="save"> {{ $t('default.save') }} </v-btn>
                 <v-btn color="error" @click="cancel"> {{ $t('default.cancel') }} </v-btn>
@@ -36,7 +37,7 @@ import { Component, PropSync, Watch } from 'vue-property-decorator'
 import ViewerMixin from '../mixin/ViewerMixin'
 import ToolCard from './ToolCard.vue'
 import { Tool } from '@/store/viewer/types'
-import { getDefaultTools } from '@/store/viewer'
+import { getDefaultTools, resetTools } from '@/store/viewer'
 
 @Component({
     components: {
@@ -76,6 +77,14 @@ export default class ToolsDialog extends ViewerMixin {
         let val = parseInt(v)
         if (!isNaN(val) && val >= 1 && val <= 10) return true
         return this.$t('viewer.tools.qtyerror')
+    }
+
+    loadDefault(): void {
+        //Deep copy
+        this.editTools.splice(0, this.editTools.length)
+        this.editTools.push(...resetTools())
+        this.editTools.forEach((t: Tool) => (t.id = Math.random()))
+        this.toolQty = this.editTools.length
     }
 
     @Watch('toolQty')

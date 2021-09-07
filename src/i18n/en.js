@@ -3,7 +3,8 @@ export default {
     default: {
         save: 'Save',
         cancel: 'Cancel',
-        reset: 'Reset'
+        reset: 'Reset',
+        default: 'Default'
     },
     $vuetify: {
         badge: 'Badge',
