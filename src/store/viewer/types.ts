@@ -5,6 +5,7 @@ export interface Viewer {
     currentFileName: string | null
     liveTracking: boolean
     fileData: string | null
+    showProgress: boolean
     tools: Tool[]
 }
 

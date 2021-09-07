@@ -1,7 +1,7 @@
 <template>
     <div>
         <canvas class="canvas-sizing" ref="viewercanvas" />
-        <v-progress-linear v-show="downloading" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
+        <v-progress-linear v-show="showProgress" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
             <template v-slot:default="{ value }">
                 <strong class="progress-text">{{ Math.ceil(value) }}% {{ message }} </strong>
             </template>
@@ -46,7 +46,6 @@ let viewer!: any
 export default class Viewer extends Mixins(ViewerMixin) {
     @Ref('viewercanvas') viewercanvas!: HTMLCanvasElement
     trackJob = false
-    downloading = false
     progressPercent = 0
     message = ''
 
@@ -73,6 +72,8 @@ export default class Viewer extends Mixins(ViewerMixin) {
         window.onresize = () => {
             viewer.resize()
         }
+
+        viewer.gcodeProcessor.loadingProgressCallback = this.updatePercent
     }
 
     beforeDestroy(): void {
@@ -127,33 +128,35 @@ export default class Viewer extends Mixins(ViewerMixin) {
     }
 
     updatePercent(status: number, message: string): void {
-        this.progressPercent = status
+        this.progressPercent = status * 100
         this.message = message
     }
 
     async trackCurrentJob(): Promise<void> {
         if (this.currentJob) {
-            this.downloading = true
+            this.showProgress = true
             let file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
-                this.downloading = false
                 this.progressPercent = 0
                 this.beforePrint()
                 await viewer.processFile(file)
                 viewer.gcodeProcessor.forceRedraw()
                 this.trackJob = true
+                this.showProgress = false
             }
-            this.downloading = false
+            this.showProgress = false
         }
     }
 
     async openLocalFile(filename: any): Promise<void> {
         if (!filename) return
         const reader = new FileReader()
+        this.showProgress = true
         reader.addEventListener('load', async (event) => {
             const blob = event?.target?.result
             this.beforePrint()
             await viewer.processFile(blob)
+            this.showProgress = false
         })
         reader.readAsText(filename)
     }

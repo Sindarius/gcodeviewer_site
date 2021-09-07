@@ -54,7 +54,7 @@ export default class DuetRestConnector extends BaseConnector {
         const encodedFilename = encodeURIComponent(filename)
         const response = await axios.get(`${this.protocol}://${this.address}/machine/file/${encodedFilename}`, {
             onDownloadProgress: (progressEvent) => {
-                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total) / 100
                 statusCallback(percentCompleted, `Downloading ${filename}`)
             }
         })

@@ -78,7 +78,7 @@ export default class KlipperRestConnector extends BaseConnector {
         filename = filename.replace('/home/pi/gcode_files', '')
         const response = await axios.get(`${this.protocol}://${this.address}/server/files/gcodes${filename}`, {
             onDownloadProgress: (progressEvent) => {
-                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total) / 100
                 statusCallback(percentCompleted, `Downloading ${filename}`)
             }
         })

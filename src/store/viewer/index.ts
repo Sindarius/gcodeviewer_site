@@ -27,6 +27,7 @@ export const getDefaultState = (): Viewer => {
         currentFileName: null,
         liveTracking: false,
         fileData: null,
+        showProgress: false,
         tools: getDefaultTools()
     }
 }

@@ -12,5 +12,8 @@ export const mutations: MutationTree<Viewer> = {
     saveTools(state, payload: Tool[]) {
         Vue.set(state, 'tools', payload)
         localStorage.setItem('tools', JSON.stringify(payload))
+    },
+    showProgress(state, payload: boolean) {
+        Vue.set(state, 'showProgress', payload)
     }
 }

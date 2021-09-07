@@ -50,9 +50,10 @@ export default class ToolCard extends ViewerMixin {
 
     set toolDiameter(value: number) {
         if (!isNaN(value)) {
-            this.tool.diameter = value
+            this.tool.diameter = Number(value)
+        } else {
+            this.tool.diameter = 0.4
         }
-        this.tool.diameter = 0.4
     }
 }
 </script>

@@ -66,7 +66,9 @@ export default {
         },
         toolbar: {
             toolstitle: 'Edit Tools',
-            download: 'Download'
+            openlocal: 'Open Local File',
+            reloadViewer: 'Reload Viewer',
+            resetCamera: 'Reset Camera'
         }
     }
 }
