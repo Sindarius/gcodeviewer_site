@@ -1,6 +1,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import BaseMixin from './BaseMixin'
 import { Tool } from '@/store/viewer/types'
+import store from '@/store'
 
 let gcodeViewer: any
 
@@ -52,23 +53,74 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/reloadRequired', value)
     }
 
+    get renderQuality(): number {
+        return this.$store.getters['viewer/renderQuality']
+    }
+
+    set renderQuality(value: number) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/renderQuality', value)
+    }
+
+    get renderMode(): number {
+        return this.$store.getters['viewer/renderMode']
+    }
+
+    set renderMode(value: number) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/renderMode', value)
+    }
+
+    get lineMode(): boolean {
+        return this.$store.getters['viewer/lineMode']
+    }
+
+    set lineMode(value: boolean) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/lineMode', value)
+    }
+
+    get voxelMode(): boolean {
+        return this.$store.getters['viewer/voxelMode']
+    }
+
+    set voxelMode(value: boolean) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/voxelMode', value)
+    }
+
+    get travelMoves(): boolean {
+        return this.$store.getters['viewer/travelMoves']
+    }
+
+    set travelMoves(value: boolean) {
+        gcodeViewer.toggleTravels(value)
+        this.$store.commit('viewer/travelMoves', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
         gcodeViewer.gcodeProcessor.cancelLoad = true
         await new Promise((resolve) => setTimeout(resolve, 500))
-        this.beforePrint()
+        this.beforeRender()
         await gcodeViewer.reload()
+        gcodeViewer.forceRedraw()
         this.showProgress = false
     }
 
-    beforePrint(): void {
-        gcodeViewer.updateRenderQuality(5)
+    beforeRender(): void {
+        gcodeViewer.toggleTravels(this.travelMoves)
+        gcodeViewer.gcodeProcessor.setColorMode(this.renderMode)
+        gcodeViewer.gcodeProcessor.updateForceWireMode(this.lineMode)
+        gcodeViewer.gcodeProcessor.setVoxelMode(this.voxelMode)
+        gcodeViewer.updateRenderQuality(this.renderQuality)
         gcodeViewer.gcodeProcessor.useHighQualityExtrusion(true)
         gcodeViewer.gcodeProcessor.resetTools()
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType) //hard code the nozzle size for now.
+            gcodeViewer.gcodeProcessor.tools[idx].toolType = tool.toolType //Patch until package can be updated
         }
     }
 

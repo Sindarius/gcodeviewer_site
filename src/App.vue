@@ -2,8 +2,10 @@
     <v-app>
         <v-app-bar app color="primary" dense>
             <Status></Status>
+            <!--
             <v-btn @click="downloadTest">Download</v-btn>
             <v-btn @click="dumpState">State</v-btn>
+            -->
             <v-spacer></v-spacer>
             <v-btn v-if="!isConnected" @click="showConnectionDialog = true"><v-icon class="mr-2">mdi-lan-connect</v-icon> Connect</v-btn>
             <v-btn v-else @click="disconnect"><v-icon class="mr-2">mdi-lan-connect</v-icon> Disconnect</v-btn>
@@ -31,6 +33,7 @@
 </style>
 
 <script lang="ts">
+import '@/assets/styles/page.scss'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Viewer from '@/components/ViewerUI/Viewer.vue'

@@ -8,6 +8,13 @@ export interface Viewer {
     showProgress: boolean
     tools: Tool[]
     reloadRequired: boolean
+    renderQuality: number
+    renderMode: number
+    lineMode: boolean | null
+    voxelMode: boolean | null
+    voxelWidth: number
+    voxelHeight: number
+    travelMoves: boolean | null
 }
 
 export class Tool {

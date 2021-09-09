@@ -6,7 +6,6 @@
                 <strong class="progress-text">{{ Math.ceil(value) }}% {{ message }} </strong>
             </template>
         </v-progress-linear>
-
         <div class="scrubber" v-show="!liveTracking && scrubFileSize > 0">
             <v-row>
                 <v-col cols="11" md="9">
@@ -42,7 +41,7 @@
 }
 .progress-position {
     position: absolute;
-    bottom: 5px;
+    bottom: 100px;
     left: 50px;
     width: calc(100% - 100px);
 }
@@ -109,6 +108,11 @@ export default class Viewer extends Mixins(ViewerMixin) {
         }
 
         viewer.gcodeProcessor.loadingProgressCallback = this.updatePercent
+
+        if (viewer.lastLoadFailed()) {
+            this.renderQuality = 1
+            viewer.clearLoadFlag()
+        }
     }
 
     beforeDestroy(): void {
@@ -175,7 +179,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
             let file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
                 this.progressPercent = 0
-                this.beforePrint()
+                this.beforeRender()
                 await viewer.processFile(file)
                 viewer.gcodeProcessor.forceRedraw()
                 this.scrubFileSize = viewer.fileSize
@@ -193,7 +197,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         this.currentFileName = `${file.name}`
         reader.addEventListener('load', async (event) => {
             const blob = event?.target?.result
-            this.beforePrint()
+            this.beforeRender()
             await viewer.processFile(blob)
             this.scrubFileSize = viewer.fileSize
             this.showProgress = false
@@ -202,6 +206,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     }
 
     disconnect(): void {
+        this.liveTracking = false
         viewer.clearScene(true)
     }
 

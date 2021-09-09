@@ -29,7 +29,14 @@ export const getDefaultState = (): Viewer => {
         fileData: null,
         showProgress: false,
         tools: getDefaultTools(),
-        reloadRequired: false
+        reloadRequired: false,
+        renderQuality: -1,
+        renderMode: -1,
+        lineMode: null,
+        voxelMode: null,
+        voxelWidth: -1,
+        voxelHeight: -1,
+        travelMoves: null
     }
 }
 

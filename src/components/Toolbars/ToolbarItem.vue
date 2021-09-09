@@ -1,8 +1,8 @@
 <template>
     <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-            <v-btn @click="clicked" v-bind="attrs" v-on="on">
-                <v-icon :color="color">{{ icon }}</v-icon>
+            <v-btn @click.stop="clicked" v-bind="attrs" v-on="on">
+                <v-icon class="ma-3" size="30" :color="color">{{ icon }}</v-icon>
             </v-btn>
         </template>
         <span>{{ title }}</span>

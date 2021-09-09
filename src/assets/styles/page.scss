@@ -3,5 +3,15 @@ body, html {
     height:100%;
     padding :0;
     margin:0;
-    overflow: hidden;
+    overflow: hidden !important;
+}
+
+$font-family:'Ubuntu';
+
+.v-application {
+  [class*='text-'] {
+    color: #36405a;
+    font-family: $font-family, sans-serif !important;
+  }
+  font-family: $font-family, sans-serif !important;
 }
