@@ -19,6 +19,20 @@
                             <v-text-field v-show="connectionType === 0" hint="Password (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
                             <v-text-field v-show="connectionType === 1" hint="API Key (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
                         </v-col>
+                        <v-col cols="12">
+                            <b>NOTES</b>
+                            <!-- Duet Notes -->
+                            <div class="notes" v-if="connectionType === 0">
+                                Depending on if you connect Standalone or SBC you may have to set M586 C param to allow CORS. <br />
+                                Example <i>M586 C"*"</i> Use at your own risk.
+                                <a href="https://duet3d.dozuki.com/Wiki/Gcode#Section_M586_Configure_network_protocols" target="_blank">https://duet3d.dozuki.com/Wiki/Gcode#Section_M586_Configure_network_protocols</a>
+                            </div>
+                            <!-- Klipper Notes -->
+                            <div v-if="connectionType === 1">
+                                Depending on your configuration you may need to supply an api key for connection. <br />
+                                Instructions are available here <a href="https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key">https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key</a> under <b>Retreiving the API Key</b>
+                            </div>
+                        </v-col>
                     </v-row>
                 </v-card-text>
                 <v-card-actions>
@@ -31,7 +45,11 @@
     </v-dialog>
 </template>
 
-<style scoped></style>
+<style scoped>
+.notes {
+    font-size: small;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'
