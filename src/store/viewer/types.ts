@@ -21,6 +21,7 @@ export interface Viewer {
     minfeedcolor: string | null
     maxfeedrate: number | null
     maxfeedcolor: string | null
+    transparency: boolean | null
 }
 
 export class Tool {
