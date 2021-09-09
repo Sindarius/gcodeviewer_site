@@ -2,11 +2,15 @@
     <div>
         <v-btn-toggle class="toggle-align mt-2" dense v-model="selectedButton" multiple>
             <ToolbarItem @click="showFileSelect" :title="$t('viewer.toolbar.openlocal')" icon="mdi-folder-outline"></ToolbarItem>
+            <ToolbarItem @click="resetCamera" :title="$t('viewer.toolbar.resetCamera')" icon="mdi-camera-outline"></ToolbarItem>
             <ToolbarItem @click="showToolsDialog = true" :title="$t('viewer.toolbar.toolstitle')" icon="mdi-printer-3d-nozzle-outline"></ToolbarItem>
             <ToolbarItem @click="reloadViewer" :title="$t('viewer.toolbar.reloadViewer')" icon="mdi-reload" :color="reloadRequiredColor"></ToolbarItem>
-            <ToolbarItem @click="resetCamera" :title="$t('viewer.toolbar.resetCamera')" icon="mdi-camera-outline"></ToolbarItem>
             <ToolbarPopover :color="qualityColor" :icon="qualityIcon">
-                <template v-slot:header> Quality </template>
+                <template v-slot:header>
+                    <v-btn @click="reloadViewer"><v-icon size="35">mdi-reload</v-icon></v-btn>
+                    <v-spacer></v-spacer>
+                    Quality
+                </template>
                 <template v-slot:content>
                     <RenderQuality></RenderQuality>
                     <RenderMode></RenderMode>

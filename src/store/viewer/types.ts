@@ -15,6 +15,12 @@ export interface Viewer {
     voxelWidth: number
     voxelHeight: number
     travelMoves: boolean | null
+    hqRender: boolean | null
+    specular: boolean | null
+    minfeedrate: number | null
+    minfeedcolor: string | null
+    maxfeedrate: number | null
+    maxfeedcolor: string | null
 }
 
 export class Tool {

@@ -69,6 +69,14 @@ export default {
             openlocal: 'Open Local File',
             reloadViewer: 'Reload Viewer',
             resetCamera: 'Reset Camera'
+        },
+        settings: {
+            hqrender: 'HQ Rendering (Round Extrusions)',
+            minfeedrate: 'Min Feed Rate',
+            maxfeedrate: 'Max Feed Rate',
+            voxelHeight: 'Voxel Height',
+            voxelWidth: 'Voxel Width',
+            useSpecular: 'Specular Lighting'
         }
     }
 }

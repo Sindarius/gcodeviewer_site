@@ -5,18 +5,25 @@
                 <v-icon class="ma-3" size="30" :color="color"> {{ icon }} </v-icon>
             </v-btn>
         </template>
-        <v-card>
+        <v-card outlined shaped elevation="10">
             <v-card-title>
                 <slot name="header"></slot>
                 <v-spacer></v-spacer>
                 <v-btn color="error" @click="menu = false"><v-icon>mdi-close</v-icon></v-btn>
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="overflow-y-auto card-overflow">
                 <slot name="content"></slot>
             </v-card-text>
         </v-card>
     </v-menu>
 </template>
+
+<style scoped>
+.card-overflow {
+    margin-top: 20px;
+    max-height: 80vh;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'

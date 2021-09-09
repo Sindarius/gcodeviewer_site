@@ -1,5 +1,8 @@
 <template>
-    <v-select v-model="renderQuality" :items="items" item-text="name" item-value="value" hint="Quality" persistent-hint> </v-select>
+    <div>
+        <v-select dense class="pa-0 mt-4" v-model="renderQuality" :items="items" item-text="name" item-value="value" label="Quality" persistent-hint> </v-select>
+        <v-switch dense class="pa-0" v-model="hqRender" v-if="renderQuality > 4" :label="$t('viewer.settings.hqrender')" persistent-hint></v-switch>
+    </div>
 </template>
 
 <style scoped></style>

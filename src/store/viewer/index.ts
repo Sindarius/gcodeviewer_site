@@ -36,7 +36,13 @@ export const getDefaultState = (): Viewer => {
         voxelMode: null,
         voxelWidth: -1,
         voxelHeight: -1,
-        travelMoves: null
+        travelMoves: null,
+        hqRender: null,
+        specular: null,
+        minfeedrate: null,
+        minfeedcolor: null,
+        maxfeedrate: null,
+        maxfeedcolor: null
     }
 }
 

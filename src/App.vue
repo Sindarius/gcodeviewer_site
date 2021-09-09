@@ -3,18 +3,21 @@
         <v-app-bar app color="primary" dense>
             <Status></Status>
             <!--
-            <v-btn @click="downloadTest">Download</v-btn>
+            
             <v-btn @click="dumpState">State</v-btn>
             -->
+            <v-btn @click="dumpState">State</v-btn>
             <v-spacer></v-spacer>
-            <v-btn v-if="!isConnected" @click="showConnectionDialog = true"><v-icon class="mr-2">mdi-lan-connect</v-icon> Connect</v-btn>
-            <v-btn v-else @click="disconnect"><v-icon class="mr-2">mdi-lan-connect</v-icon> Disconnect</v-btn>
+            <v-btn v-if="!isConnected" @click="showConnectionDialog = true" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Connect</v-btn>
+            <v-btn v-else @click="disconnect" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Disconnect</v-btn>
+            <v-btn @click="showAboutDialog = true"><v-icon>mdi-information-outline</v-icon></v-btn>
         </v-app-bar>
 
         <v-main class="main-relative">
             <Viewer />
             <Connect :show.sync="showConnectionDialog"></Connect>
             <Toolbar class="toolbar"></Toolbar>
+            <About :show.sync="showAboutDialog"></About>
         </v-main>
     </v-app>
 </template>
@@ -41,6 +44,7 @@ import Connect from '@/components/ViewerUI/Connect.vue'
 import Status from '@/components/utils/Status.vue'
 import Toolbar from '@/components/Toolbars/Toolbar.vue'
 import BaseConnector from './store/connectors/BaseConnector'
+import About from '@/components/about/About.vue'
 
 import { PrinterStateMotion, PrinterStatus } from './store/printer/types'
 
@@ -49,12 +53,14 @@ import { PrinterStateMotion, PrinterStatus } from './store/printer/types'
         Viewer,
         Connect,
         Status,
-        Toolbar
+        Toolbar,
+        About
     }
 })
 export default class App extends Vue {
     showConnectionDialog = false
     showToolsDialog = false
+    showAboutDialog = false
 
     get connection(): BaseConnector {
         return this.$store.state.connections.connection

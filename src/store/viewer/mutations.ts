@@ -56,5 +56,31 @@ export const mutations: MutationTree<Viewer> = {
     travelMoves(state, payload: number) {
         localStorage.setItem('travelMoves', `${payload}`)
         Vue.set(state, 'travelMoves', payload)
+    },
+    hqRender(state, payload: boolean) {
+        localStorage.setItem('hqRender', `${payload}`)
+        Vue.set(state, 'hqRender', payload)
+    },
+    specular(state, payload: boolean) {
+        localStorage.setItem('specular', `${payload}`)
+        Vue.set(state, 'specular', payload)
+    },
+    minfeedrate(state, payload: number) {
+        if (payload < 0) payload = 1
+        localStorage.setItem('minfeedrate', `${payload}`)
+        Vue.set(state, 'minfeedrate', payload)
+    },
+    maxfeedrate(state, payload: number) {
+        if (payload < 0) payload = 1
+        localStorage.setItem('maxfeedrate', `${payload}`)
+        Vue.set(state, 'maxfeedrate', payload)
+    },
+    minfeedcolor(state, payload: string) {
+        localStorage.setItem('minfeedcolor', `${payload}`)
+        Vue.set(state, 'minfeedcolor', payload)
+    },
+    maxfeedcolor(state, payload: string) {
+        localStorage.setItem('maxfeedcolor', `${payload}`)
+        Vue.set(state, 'maxfeedcolor', payload)
     }
 }

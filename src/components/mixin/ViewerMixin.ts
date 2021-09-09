@@ -89,6 +89,24 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/voxelMode', value)
     }
 
+    get voxelWidth(): number {
+        return this.$store.getters['viewer/voxelWidth']
+    }
+
+    set voxelWidth(value: number) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/voxelWidth', value)
+    }
+
+    get voxelHeight(): number {
+        return this.$store.getters['viewer/voxelHeight']
+    }
+
+    set voxelHeight(value: number) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/voxelHeight', value)
+    }
+
     get travelMoves(): boolean {
         return this.$store.getters['viewer/travelMoves']
     }
@@ -98,6 +116,60 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/travelMoves', value)
     }
 
+    get hqRender(): boolean {
+        return this.$store.getters['viewer/hqRender']
+    }
+
+    set hqRender(value: boolean) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/hqRender', value)
+    }
+
+    get specular(): boolean {
+        return this.$store.getters['viewer/specular']
+    }
+
+    set specular(value: boolean) {
+        gcodeViewer.gcodeProcessor.useSpecularColor(value)
+        this.$store.commit('viewer/specular', value)
+    }
+
+    get minFeedRate(): number {
+        return this.$store.getters['viewer/minfeedrate']
+    }
+
+    set minFeedRate(value: number) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/minfeedrate', value)
+    }
+
+    get maxFeedRate(): number {
+        return this.$store.getters['viewer/maxfeedrate']
+    }
+
+    set maxFeedRate(value: number) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/maxfeedrate', value)
+    }
+
+    get minFeedColor(): string {
+        return this.$store.getters['viewer/minfeedcolor']
+    }
+
+    set minFeedColor(value: string) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/minfeedcolor', value)
+    }
+
+    get maxFeedColor(): string {
+        return this.$store.getters['viewer/maxfeedcolor']
+    }
+
+    set maxFeedColor(value: string) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/maxfeedcolor', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -105,17 +177,22 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         await new Promise((resolve) => setTimeout(resolve, 500))
         this.beforeRender()
         await gcodeViewer.reload()
-        gcodeViewer.forceRedraw()
+        gcodeViewer.gcodeProcessor.forceRedraw()
         this.showProgress = false
     }
 
     beforeRender(): void {
+        if (this.voxelMode) {
+            gcodeViewer.gcodeProcessor.voxelWidth = this.voxelWidth
+            gcodeViewer.gcodeProcessor.voxelHeight = this.voxelHeight
+        }
+        gcodeViewer.gcodeProcessor.useSpecularColor(this.specular)
         gcodeViewer.toggleTravels(this.travelMoves)
         gcodeViewer.gcodeProcessor.setColorMode(this.renderMode)
         gcodeViewer.gcodeProcessor.updateForceWireMode(this.lineMode)
         gcodeViewer.gcodeProcessor.setVoxelMode(this.voxelMode)
         gcodeViewer.updateRenderQuality(this.renderQuality)
-        gcodeViewer.gcodeProcessor.useHighQualityExtrusion(true)
+        gcodeViewer.gcodeProcessor.useHighQualityExtrusion(this.hqRender)
         gcodeViewer.gcodeProcessor.resetTools()
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]

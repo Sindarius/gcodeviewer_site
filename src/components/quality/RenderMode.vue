@@ -2,14 +2,27 @@
     <div>
         <v-select v-model="renderMode" :items="items" item-text="name" item-value="value" hint="Render Mode" persistent-hint> </v-select>
         <v-row dense v-if="renderMode === 1">
-            <v-col cols="6">a </v-col>
-            <v-col cols="6">b </v-col>
-            <v-col cols="6">c </v-col>
-            <v-col cols="6">d </v-col>
+            <v-col cols="6">
+                <v-text-field v-model="minFeedRate" type="number" :label="$t('viewer.settings.minfeedrate')"></v-text-field>
+            </v-col>
+            <v-col cols="6"><color-picker v-model="minFeedColor"></color-picker> </v-col>
+            <v-col cols="6">
+                <v-text-field v-model="maxFeedRate" type="number" :label="$t('viewer.settings.maxfeedrate')"></v-text-field>
+            </v-col>
+            <v-col cols="6"><color-picker v-model="maxFeedColor"></color-picker> </v-col>
         </v-row>
         <v-switch class="mt-1 mb-0" v-model="travelMoves" dense label="Show Travel Moves"></v-switch>
         <v-switch class="ma-0" v-model="lineMode" dense label="Force Line Mode"></v-switch>
         <v-switch class="ma-0" v-model="voxelMode" dense label="Voxel Mode (ASMBL)"></v-switch>
+        <v-row v-if="voxelMode">
+            <v-col cols="6">
+                <v-text-field type="number" v-model="voxelWidth" :label="$t('viewer.settings.voxelWidth')"></v-text-field>
+            </v-col>
+            <v-col cols="6">
+                <v-text-field type="number" v-model="voxelHeight" :label="$t('viewer.settings.voxelHeight')"></v-text-field>
+            </v-col>
+        </v-row>
+        <v-switch class="mt-1 mb-0" v-model="specular" dense :label="$t('viewer.settings.useSpecular')"></v-switch>
     </div>
 </template>
 
@@ -18,8 +31,9 @@
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import ViewerMixin from '@/components/mixin/ViewerMixin'
+import ColorPicker from '@/components/tools/ColorPicker.vue'
 
-@Component
+@Component({ components: { ColorPicker } })
 export default class Mode extends Mixins(ViewerMixin) {
     items = [
         { name: 'Color', value: 0 },

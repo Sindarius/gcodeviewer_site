@@ -2,6 +2,50 @@ import { GetterTree } from 'vuex'
 import { RootState } from '../types'
 import { Viewer } from './types'
 
+function getBooleanLocalStorage(prop: any, fieldname: string): boolean {
+    let result = prop
+    if (result === null) {
+        //Check if we have a value in local storage
+        try {
+            const rq = localStorage.getItem(fieldname)
+            result = rq == 'true'
+        } catch {
+            result = false
+        }
+    }
+    return result
+}
+
+function getNumberLocalStorage(prop: any, fieldname: string, defaultValue = 1): number {
+    let result = prop
+    if (result === null || result === -1) {
+        //Check if we have a value in local storage
+        const rq = localStorage.getItem(fieldname)
+        if (rq) {
+            const value = Number(rq)
+            if (!isNaN(value)) result = value
+        } else {
+            result = defaultValue
+        }
+    }
+    return result
+}
+
+function getColorLocalStorage(prop: any, fieldname: string, defaultValue: string): string {
+    let result = prop
+    if (result === null) {
+        //Check if we have a value in local storage
+        try {
+            const rq = localStorage.getItem(fieldname)
+            if (rq === null) return defaultValue
+            result = rq.length > 0 ?? false ? rq : defaultValue
+        } catch {
+            result = defaultValue
+        }
+    }
+    return result
+}
+
 export const getters: GetterTree<Viewer, RootState> = {
     renderQuality(state) {
         let result = state.renderQuality
@@ -32,32 +76,10 @@ export const getters: GetterTree<Viewer, RootState> = {
         return result
     },
     lineMode(state) {
-        let result = state.lineMode
-        if (result === null) {
-            //Check if we have a value in local storage
-            try {
-                const rq = localStorage.getItem('lineMode')
-                result = rq == 'true'
-            } catch {
-                result = false
-            }
-        }
-
-        return result
+        return getBooleanLocalStorage(state.lineMode, 'lineMode')
     },
     voxelMode(state) {
-        let result = state.voxelMode
-        if (result === null) {
-            //Check if we have a value in local storage
-            try {
-                const rq = localStorage.getItem('voxelMode')
-                result = rq == 'true'
-            } catch {
-                result = false
-            }
-        }
-
-        return result
+        return getBooleanLocalStorage(state.voxelMode, 'voxelMode')
     },
     voxelWidth(state) {
         let result = state.voxelWidth
@@ -99,5 +121,23 @@ export const getters: GetterTree<Viewer, RootState> = {
             }
         }
         return result
+    },
+    hqRender(state) {
+        return getBooleanLocalStorage(state.hqRender, 'hqRender')
+    },
+    specular(state) {
+        return getBooleanLocalStorage(state.specular, 'specular')
+    },
+    minfeedrate(state) {
+        return getNumberLocalStorage(state.minfeedrate, 'minfeedrate', 10)
+    },
+    maxfeedrate(state) {
+        return getNumberLocalStorage(state.maxfeedrate, 'maxfeedrate', 60)
+    },
+    minfeedcolor(state) {
+        return getColorLocalStorage(state.minfeedcolor, 'minfeedcolor', '#0000FF')
+    },
+    maxfeedcolor(state) {
+        return getColorLocalStorage(state.maxfeedcolor, 'maxfeedcolor', '#FF0000')
     }
 }
