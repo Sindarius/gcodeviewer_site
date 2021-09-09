@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
             <v-btn v-if="!isConnected" @click="showConnectionDialog = true" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Connect</v-btn>
             <v-btn v-else @click="disconnect" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Disconnect</v-btn>
-            <v-btn @click="showAboutDialog = true"><v-icon>mdi-information-outline</v-icon></v-btn>
+            <v-btn @click="showAboutDialog = true"><v-icon color="green">mdi-information-outline</v-icon></v-btn>
         </v-app-bar>
 
         <v-main class="main-relative">
