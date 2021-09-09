@@ -31,6 +31,7 @@
                             <div v-if="connectionType === 1">
                                 Depending on your configuration you may need to supply an api key for connection. <br />
                                 Instructions are available here <a href="https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key" target="_blank">https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key</a> under <b>Retreiving the API Key</b>
+                                You may have to add https://sindarius.github.io to the cors_domains in moonraker.conf
                             </div>
                         </v-col>
                     </v-row>
@@ -118,8 +119,7 @@ export default class ConnectDialog extends Vue {
                 break
             case 1:
                 try {
-                    //try rest connector
-                    console.log(this.password)
+                    //try poll connector
                     this.connector = new KlipperRestConnector(this.$store)
                     await this.connector.connect(this.address, this.password)
                 } catch {
