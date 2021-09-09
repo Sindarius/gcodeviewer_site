@@ -82,5 +82,9 @@ export const mutations: MutationTree<Viewer> = {
     maxfeedcolor(state, payload: string) {
         localStorage.setItem('maxfeedcolor', `${payload}`)
         Vue.set(state, 'maxfeedcolor', payload)
+    },
+    transparency(state, payload: boolean) {
+        localStorage.setItem('transparency', `${payload}`)
+        Vue.set(state, 'transparency', payload)
     }
 }

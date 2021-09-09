@@ -139,5 +139,8 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     maxfeedcolor(state) {
         return getColorLocalStorage(state.maxfeedcolor, 'maxfeedcolor', '#FF0000')
+    },
+    transparency(state) {
+        return getBooleanLocalStorage(state.transparency, 'transparency')
     }
 }

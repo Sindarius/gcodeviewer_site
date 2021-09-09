@@ -69,6 +69,7 @@ import { Component, Ref, Watch, Mixins } from 'vue-property-decorator'
 import ViewerMixin from '@/components/mixin/ViewerMixin'
 import { BuildVolume, PrinterStateMotion } from '@/store/printer/types'
 import { Viewer as ViewerState } from '@/store/viewer/types'
+import axios from 'axios'
 
 let viewer!: any
 
@@ -97,6 +98,10 @@ export default class Viewer extends Mixins(ViewerMixin) {
             await this.openLocalFile(file)
         })
 
+        this.$eventHub.$on('LoadBenchy', async () => {
+            await this.OpenBenchy()
+        })
+
         //initialize
         if (viewer) return
         viewer = new GCodeViewer(this.viewercanvas)
@@ -119,6 +124,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         this.$eventHub.$off('trackCurrentJob')
         this.$eventHub.$off('disconnect')
         this.$eventHub.$off('openLocalFile')
+        this.$eventHub.$off('LoadBenchy')
     }
 
     get cursorPosition(): PrinterStateMotion {
@@ -188,6 +194,23 @@ export default class Viewer extends Mixins(ViewerMixin) {
             }
             this.showProgress = false
         }
+    }
+
+    async OpenBenchy(): Promise<void> {
+        this.showProgress = true
+        this.currentFileName = 'benchy_color.gcode'
+        let response = await axios.get('./benchy_color.gcode', {
+            onDownloadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total) / 100
+                this.updatePercent(percentCompleted, `Downloading Benchy`)
+            }
+        })
+        let result = response.data
+        this.scrubFileSize = result.length
+        viewer.gcodeProcessor.updateFilePosition(result.length)
+        this.beforeRender()
+        await viewer.processFile(result)
+        this.showProgress = false
     }
 
     async openLocalFile(file: File): Promise<void> {

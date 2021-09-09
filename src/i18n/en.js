@@ -76,7 +76,10 @@ export default {
             maxfeedrate: 'Max Feed Rate',
             voxelHeight: 'Voxel Height',
             voxelWidth: 'Voxel Width',
-            useSpecular: 'Specular Lighting'
+            useSpecular: 'Specular Lighting',
+            transparency: 'Transparency',
+            forceLineMode: 'Force Line Mode',
+            voxelMode: 'Voxel Mode (ASMBL)'
         }
     }
 }

@@ -17,6 +17,10 @@
                     If you enjoy this viewer consider buying me a coffee<br />
                     <strong><a href="https://www.buymeacoffee.com/sindarius" target="_blank">https://www.buymeacoffee.com/sindarius</a></strong>
                 </p>
+                <p>
+                    Don't have a gcode file to load.... How about loading a benchy :)
+                    <v-btn color="info" @click="loadBenchy">Load a benchy!</v-btn>
+                </p>
             </v-card-text>
         </v-card>
     </v-dialog>
@@ -29,5 +33,10 @@ import { Component, Vue, PropSync } from 'vue-property-decorator'
 @Component
 export default class About extends Vue {
     @PropSync('show', { type: Boolean }) showDialog!: boolean
+
+    loadBenchy() {
+        this.$eventHub.$emit('LoadBenchy')
+        this.showDialog = false
+    }
 }
 </script>

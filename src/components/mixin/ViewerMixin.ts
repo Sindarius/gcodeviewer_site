@@ -170,6 +170,15 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/maxfeedcolor', value)
     }
 
+    get transparency(): boolean {
+        return this.$store.getters['viewer/transparency']
+    }
+
+    set transparency(value: boolean) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/transparency', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -194,6 +203,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.updateRenderQuality(this.renderQuality)
         gcodeViewer.gcodeProcessor.useHighQualityExtrusion(this.hqRender)
         gcodeViewer.gcodeProcessor.resetTools()
+        gcodeViewer.gcodeProcessor.setAlpha(this.transparency)
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType) //hard code the nozzle size for now.

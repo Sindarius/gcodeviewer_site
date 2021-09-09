@@ -12,8 +12,9 @@
             <v-col cols="6"><color-picker v-model="maxFeedColor"></color-picker> </v-col>
         </v-row>
         <v-switch class="mt-1 mb-0" v-model="travelMoves" dense label="Show Travel Moves"></v-switch>
-        <v-switch class="ma-0" v-model="lineMode" dense label="Force Line Mode"></v-switch>
-        <v-switch class="ma-0" v-model="voxelMode" dense label="Voxel Mode (ASMBL)"></v-switch>
+        <v-switch class="ma-0" v-model="transparency" dense :label="$t('viewer.settings.transparency')"></v-switch>
+        <v-switch class="ma-0" v-model="lineMode" dense :label="$t('viewer.settings.forceLineMode')"></v-switch>
+        <v-switch class="ma-0" v-model="voxelMode" dense :label="$t('viewer.settings.voxelMode')"></v-switch>
         <v-row v-if="voxelMode">
             <v-col cols="6">
                 <v-text-field type="number" v-model="voxelWidth" :label="$t('viewer.settings.voxelWidth')"></v-text-field>
