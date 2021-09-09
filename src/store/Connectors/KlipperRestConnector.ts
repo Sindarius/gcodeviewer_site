@@ -6,17 +6,20 @@ export default class KlipperRestConnector extends BaseConnector {
     connectionType = ConnectionType.klipper
     connection_id = ''
     pollInterval = -1
+    apiHeader = {}
 
     constructor(store: any) {
         super(store)
     }
 
     //Use the Password for API Key if specified
-    async connect(address: string, protocol = 'http', password = ''): Promise<void> {
+    async connect(address: string, password = '', protocol = 'http'): Promise<void> {
+        console.log(password)
         this.address = address
         this.password = password
         let apiKey = password
-
+        console.log(apiKey)
+        const apiString = ''
         if (!this.address.includes(':')) {
             this.address += ':7125' //Default moonraker port
         }
@@ -30,20 +33,21 @@ export default class KlipperRestConnector extends BaseConnector {
             apiKey = apiKeyEndPoint.data.result
         }
 
-        let socketAddress = `ws://${this.address}/websocket`
         if (apiKey) {
-            socketAddress += `?token=${apiKey}`
+            this.apiHeader = {
+                'X-Api-Key': apiKey
+            }
         }
 
         //const data = await axios.get(`${this.protocol}://${this.address}/printer/objects/list`)
         //console.log(data.data)
 
-        const stats = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?configfile&webhooks&motion_report&virtual_sdcard&display_status`)
+        const stats = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?configfile&webhooks&motion_report&virtual_sdcard&display_status${apiString}`, { headers: this.apiHeader })
         this.store?.commit('printer/updateKlipperModelData', stats.data.result.status)
 
         return new Promise((resolve) => {
             this.pollInterval = setInterval(async () => {
-                const response = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?motion_report&virtual_sdcard&display_status`)
+                const response = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?motion_report&virtual_sdcard&display_status${apiString}`, { headers: this.apiHeader })
                 this.store?.commit('printer/updateKlipperModelData', response.data.result.status)
             }, 250)
             this.connected = true
@@ -61,6 +65,7 @@ export default class KlipperRestConnector extends BaseConnector {
     async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
         filename = filename.replace('/home/pi/gcode_files', '')
         const response = await axios.get(`${this.protocol}://${this.address}/server/files/gcodes${filename}`, {
+            headers: this.apiHeader,
             onDownloadProgress: (progressEvent) => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total) / 100
                 statusCallback(percentCompleted, `Downloading ${filename}`)

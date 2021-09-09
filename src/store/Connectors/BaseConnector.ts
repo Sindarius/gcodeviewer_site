@@ -18,7 +18,7 @@ export default class BaseConnector {
         this.store = store
     }
 
-    async connect(address: string, protocol = 'http', password = 'reprap'): Promise<void> {
+    async connect(address: string, password = 'reprap', protocol = 'http'): Promise<void> {
         return
     }
 

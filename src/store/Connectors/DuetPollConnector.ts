@@ -9,7 +9,7 @@ export default class DuetPollConnector extends BaseConnector {
         super(store)
     }
 
-    async connect(address: string, protocol = 'http', password = 'reprap'): Promise<void> {
+    async connect(address: string, password = 'reprap', protocol = 'http'): Promise<void> {
         if (this.pollInterval == -1) {
             this.disconnect()
         }

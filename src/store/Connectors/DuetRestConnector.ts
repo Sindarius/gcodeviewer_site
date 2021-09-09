@@ -9,7 +9,7 @@ export default class DuetRestConnector extends BaseConnector {
         super(store)
     }
 
-    async connect(address: string, protocol = 'http', password = 'reprap'): Promise<void> {
+    async connect(address: string, password = 'reprap', protocol = 'http'): Promise<void> {
         this.protocol = protocol
         this.protocolWS = protocol == 'http' ? 'ws' : 'wss'
         this.address = address

@@ -100,7 +100,7 @@ export default class ConnectDialog extends Vue {
                 //Try poll connection
                 try {
                     this.connector = new DuetPollConnector(this.$store)
-                    await this.connector.connect(this.address)
+                    await this.connector.connect(this.address, this.password)
                 } catch {
                     //do nothing
                 }
@@ -119,8 +119,9 @@ export default class ConnectDialog extends Vue {
             case 1:
                 try {
                     //try rest connector
+                    console.log(this.password)
                     this.connector = new KlipperRestConnector(this.$store)
-                    await this.connector.connect(this.address)
+                    await this.connector.connect(this.address, this.password)
                 } catch {
                     //do nothing
                 }
