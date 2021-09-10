@@ -17,16 +17,10 @@ export default class KlipperRestConnector extends BaseConnector {
         this.address = address
         this.password = password
         let apiKey = password
+        this.apiHeader = {}
         const apiString = ''
         if (!this.address.includes(':')) {
             this.address += ':7125' //Default moonraker port
-        }
-
-        if (apiKey) {
-            this.apiHeader = {
-                'Content-Type': 'text/plain',
-                'X-Api-Key': apiKey
-            }
         }
 
         //get oneshot token - Try to get one shot if we don't have the API_KEY provided
@@ -38,6 +32,12 @@ export default class KlipperRestConnector extends BaseConnector {
             apiKey = apiKeyEndPoint.data.result
         }
 
+        if (apiKey) {
+            this.apiHeader = {
+                'Content-Type': 'text/plain',
+                'X-Api-Key': apiKey
+            }
+        }
         //const data = await axios.get(`${this.protocol}://${this.address}/printer/objects/list`)
         //console.log(data.data)
 
@@ -46,7 +46,6 @@ export default class KlipperRestConnector extends BaseConnector {
 
         return new Promise((resolve) => {
             this.pollInterval = setInterval(async () => {
-                console.log('poll')
                 const response = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?motion_report&virtual_sdcard&display_status`, { headers: this.apiHeader, data: {} })
                 this.store?.commit('printer/updateKlipperModelData', response.data.result.status)
             }, 250)

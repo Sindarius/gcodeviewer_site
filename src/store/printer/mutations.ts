@@ -78,8 +78,12 @@ export const mutations: MutationTree<PrinterState> = {
         merge(result, payload)
         Vue.set(state, 'sourcemodel', result)
 
+        if (payload.webhooks?.state === 'error') {
+            console.error(`Klipper has reported an error : ${payload.webhooks?.state_message}`)
+        }
+
         //set config info
-        if (payload.configfile?.config) {
+        if (payload.configfile?.config?.stepper_x) {
             try {
                 const buildVolume: BuildVolume[] = []
                 buildVolume.push(new BuildVolume('X', Number.parseFloat(payload.configfile.config.stepper_x.position_endstop), Number.parseFloat(payload.configfile.config.stepper_x.position_max)))

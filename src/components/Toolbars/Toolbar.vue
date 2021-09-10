@@ -105,10 +105,5 @@ export default class Toolbar extends Mixins(ViewerMixin) {
     get canLiveTrack(): boolean {
         return !this.$store.state.viewer.liveTracking && this.$store.getters['printer/isPrinting']
     }
-
-    get size() {
-        const size = { xs: 'x-small', sm: 'small', md: 'medium', lg: 'large', xl: 'x-large' }[this.$vuetify.breakpoint.name]
-        return size ? { [size]: true } : {}
-    }
 }
 </script>
