@@ -7,11 +7,11 @@
             </template>
         </v-progress-linear>
         <div class="scrubber" v-show="!liveTracking && scrubFileSize > 0">
-            <v-row>
-                <v-col cols="11" md="9">
+            <v-row dense>
+                <v-col cols="9" md="9">
                     <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
                 </v-col>
-                <v-col cols="1">
+                <v-col cols="3">
                     <v-btn @click="scrubPlaying = !scrubPlaying">
                         <v-icon v-if="scrubPlaying">mdi-stop</v-icon>
                         <v-icon v-else>mdi-play</v-icon>

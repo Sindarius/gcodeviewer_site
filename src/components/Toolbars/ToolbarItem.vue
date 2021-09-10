@@ -1,11 +1,11 @@
 <template>
     <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn @click.stop="clicked" v-bind="attrs" v-on="on">
-                <v-icon class="ma-3" size="30" :color="color">{{ icon }}</v-icon>
+        <template v-slot:activator="{ on }">
+            <v-btn v-bind="size" @click.stop="clicked" v-on="on">
+                <v-icon v-bind="size" :color="color">{{ icon }}</v-icon>
             </v-btn>
         </template>
-        <span>{{ title }}</span>
+        <span>{{ title }} {{ size }}</span>
     </v-tooltip>
 </template>
 
@@ -23,6 +23,11 @@ export default class ToolbarItem extends Vue {
 
     clicked() {
         this.$emit('click')
+    }
+
+    get size(): any {
+        const size = { xs: '', sm: 'medium', md: '', lg: 'large', xl: 'x-large' }[this.$vuetify.breakpoint.name]
+        return size ? { [size]: true } : {}
     }
 }
 </script>

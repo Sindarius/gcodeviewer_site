@@ -1,8 +1,8 @@
 <template>
     <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" @click.stop="menu = !menu">
-                <v-icon class="ma-3" size="30" :color="color"> {{ icon }} </v-icon>
+        <template v-slot:activator="{ on }">
+            <v-btn v-bind="size" v-on="on" @click.stop="menu = !menu">
+                <v-icon v-bind="size" :color="color"> {{ icon }} </v-icon>
             </v-btn>
         </template>
         <v-card outlined shaped elevation="10">
@@ -35,5 +35,10 @@ export default class ToolbarPopover extends Vue {
     @Prop() icon!: string
     @Prop() title!: string
     @Prop() color!: string
+
+    get size(): any {
+        const size = { xs: '', sm: 'medium', md: '', lg: 'large', xl: 'x-large' }[this.$vuetify.breakpoint.name]
+        return size ? { [size]: true } : {}
+    }
 }
 </script>
