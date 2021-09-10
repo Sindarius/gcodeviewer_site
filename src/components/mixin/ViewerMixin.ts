@@ -223,9 +223,10 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
             gcodeViewer.gcodeProcessor.voxelWidth = this.voxelWidth
             gcodeViewer.gcodeProcessor.voxelHeight = this.voxelHeight
         }
+        gcodeViewer.setZClipPlane(-1000, 3000)
         gcodeViewer.setBackgroundColor(this.backgroundColor)
         gcodeViewer.setProgressColor(this.progressColor)
-        gcodeViewer.bed.setColor(this.gridColor)
+        gcodeViewer.bed.setBedColor(this.gridColor)
         gcodeViewer.gcodeProcessor.useSpecularColor(this.specular)
         gcodeViewer.toggleTravels(this.travelMoves)
         gcodeViewer.gcodeProcessor.setColorMode(this.renderMode)
