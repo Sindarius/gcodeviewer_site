@@ -16,6 +16,16 @@
                     <RenderMode></RenderMode>
                 </template>
             </ToolbarPopover>
+            <ToolbarPopover icon="mdi-palette">
+                <template v-slot:header>
+                    <v-btn @click="reloadViewer"><v-icon size="35">mdi-reload</v-icon></v-btn>
+                    <v-spacer></v-spacer>
+                    Colors
+                </template>
+                <template v-slot:content>
+                    <RenderColors></RenderColors>
+                </template>
+            </ToolbarPopover>
             <ToolbarItem @click="liveTrack" v-if="canLiveTrack" :title="$t('viewer.toolbar.liveTrack')" icon="mdi-vhs" color="warning"></ToolbarItem>
         </v-btn-toggle>
         <tools-dialog :show.sync="showToolsDialog"></tools-dialog>
@@ -44,6 +54,7 @@ import ToolbarItem from './ToolbarItem.vue'
 import ToolbarPopover from './ToolbarPopover.vue'
 import RenderQuality from '@/components/quality/RenderQuality.vue'
 import RenderMode from '@/components/quality/RenderMode.vue'
+import RenderColors from '@/components/quality/RenderColors.vue'
 
 @Component({
     components: {
@@ -51,7 +62,8 @@ import RenderMode from '@/components/quality/RenderMode.vue'
         ToolbarItem,
         ToolbarPopover,
         RenderQuality,
-        RenderMode
+        RenderMode,
+        RenderColors
     }
 })
 export default class Toolbar extends Mixins(ViewerMixin) {

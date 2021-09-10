@@ -179,6 +179,34 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/transparency', value)
     }
 
+    get progressColor(): string {
+        return this.$store.getters['viewer/progressColor']
+    }
+
+    set progressColor(value: string) {
+        gcodeViewer.setProgressColor(this.progressColor)
+        this.$store.commit('viewer/progressColor', value)
+    }
+
+    get backgroundColor(): string {
+        return this.$store.getters['viewer/backgroundColor']
+    }
+
+    set backgroundColor(value: string) {
+        gcodeViewer.setBackgroundColor(this.backgroundColor)
+        gcodeViewer.forceRender()
+        this.$store.commit('viewer/backgroundColor', value)
+    }
+
+    get gridColor(): string {
+        return this.$store.getters['viewer/gridColor']
+    }
+
+    set gridColor(value: string) {
+        gcodeViewer.bed.setBedColor(value)
+        this.$store.commit('viewer/gridColor', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -195,6 +223,9 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
             gcodeViewer.gcodeProcessor.voxelWidth = this.voxelWidth
             gcodeViewer.gcodeProcessor.voxelHeight = this.voxelHeight
         }
+        gcodeViewer.setBackgroundColor(this.backgroundColor)
+        gcodeViewer.setProgressColor(this.progressColor)
+        gcodeViewer.bed.setColor(this.gridColor)
         gcodeViewer.gcodeProcessor.useSpecularColor(this.specular)
         gcodeViewer.toggleTravels(this.travelMoves)
         gcodeViewer.gcodeProcessor.setColorMode(this.renderMode)

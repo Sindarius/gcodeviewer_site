@@ -43,7 +43,10 @@ export const getDefaultState = (): Viewer => {
         minfeedcolor: null,
         maxfeedrate: null,
         maxfeedcolor: null,
-        transparency: null
+        transparency: null,
+        progressColor: null,
+        backgroundColor: null,
+        gridColor: null
     }
 }
 

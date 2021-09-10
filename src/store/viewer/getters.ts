@@ -142,5 +142,14 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     transparency(state) {
         return getBooleanLocalStorage(state.transparency, 'transparency')
+    },
+    progressColor(state) {
+        return getColorLocalStorage(state.progressColor, 'progressColor', '#00FF00')
+    },
+    backgroundColor(state) {
+        return getColorLocalStorage(state.backgroundColor, 'backgroundColor', '#000000')
+    },
+    gridColor(state) {
+        return getColorLocalStorage(state.gridColor, 'gridColor', '#0000FF')
     }
 }

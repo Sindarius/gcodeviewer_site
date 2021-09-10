@@ -86,5 +86,17 @@ export const mutations: MutationTree<Viewer> = {
     transparency(state, payload: boolean) {
         localStorage.setItem('transparency', `${payload}`)
         Vue.set(state, 'transparency', payload)
+    },
+    progressColor(state, payload: string) {
+        localStorage.setItem('progressColor', payload)
+        Vue.set(state, 'progressColor', payload)
+    },
+    backgroundColor(state, payload: string) {
+        localStorage.setItem('backgroundColor', payload)
+        Vue.set(state, 'backgroundColor', payload)
+    },
+    gridColor(state, payload: string) {
+        localStorage.setItem('gridColor', payload)
+        Vue.set(state, 'gridColor', payload)
     }
 }

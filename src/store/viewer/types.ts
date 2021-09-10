@@ -22,6 +22,9 @@ export interface Viewer {
     maxfeedrate: number | null
     maxfeedcolor: string | null
     transparency: boolean | null
+    progressColor: boolean | null
+    backgroundColor: boolean | null
+    gridColor: boolean | null
 }
 
 export class Tool {
