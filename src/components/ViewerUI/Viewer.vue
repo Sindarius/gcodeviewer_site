@@ -143,15 +143,6 @@ export default class Viewer extends Mixins(ViewerMixin) {
         return this.$store.state.printer.job?.filePosition ?? 0
     }
 
-    get probablyMobile(): boolean {
-        switch (this.$vuetify.breakpoint.name) {
-            case 'xs':
-            case 'sm':
-                return true
-        }
-        return false
-    }
-
     @Watch('currentFilePosition')
     currentFilePositionUpdated(to: number): void {
         if (this.liveTracking) {

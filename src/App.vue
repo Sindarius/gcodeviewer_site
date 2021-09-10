@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar app color="primary" dense>
+        <v-app-bar absolute app color="primary" dense>
             <Status></Status>
             <!--
             <v-btn @click="dumpState">State</v-btn>
@@ -14,8 +14,8 @@
         <v-main class="main-relative">
             <Viewer />
             <Connect :show.sync="showConnectionDialog"></Connect>
-            <Toolbar class="toolbar"></Toolbar>
             <About :show.sync="showAboutDialog"></About>
+            <Toolbar :class="toolbarClass"></Toolbar>
         </v-main>
     </v-app>
 </template>
@@ -36,12 +36,19 @@
     float: left;
     top: 10px;
 }
+
+.toolbar-sm {
+    position: absolute;
+    left: 50%;
+    float: left;
+    top: 50px;
+}
 </style>
 
 <script lang="ts">
 import '@/assets/styles/page.scss'
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import Viewer from '@/components/ViewerUI/Viewer.vue'
 import Connect from '@/components/ViewerUI/Connect.vue'
 import Status from '@/components/utils/Status.vue'
@@ -50,6 +57,7 @@ import BaseConnector from './store/connectors/BaseConnector'
 import About from '@/components/about/About.vue'
 
 import { PrinterStateMotion, PrinterStatus } from './store/printer/types'
+import BaseMixin from './components/mixin/BaseMixin'
 
 @Component({
     components: {
@@ -60,7 +68,7 @@ import { PrinterStateMotion, PrinterStatus } from './store/printer/types'
         About
     }
 })
-export default class App extends Vue {
+export default class App extends Mixins(BaseMixin) {
     showConnectionDialog = false
     showToolsDialog = false
     showAboutDialog = false
@@ -79,6 +87,10 @@ export default class App extends Vue {
 
     get isConnected(): boolean {
         return this.$store.getters['connections/isConnected']
+    }
+
+    get toolbarClass(): string {
+        return this.isMobile ? 'toolbar-sm' : 'toolbar'
     }
 
     async downloadTest(): Promise<void> {
