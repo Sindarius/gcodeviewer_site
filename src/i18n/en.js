@@ -68,7 +68,8 @@ export default {
             toolstitle: 'Edit Tools',
             openlocal: 'Open Local File',
             reloadViewer: 'Reload Viewer',
-            resetCamera: 'Reset Camera'
+            resetCamera: 'Reset Camera',
+            liveTrack: 'Live Track Print'
         },
         settings: {
             hqrender: 'HQ Rendering (Round Extrusions)',

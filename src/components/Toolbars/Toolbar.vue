@@ -82,11 +82,11 @@ export default class Toolbar extends Mixins(ViewerMixin) {
         this.$eventHub.$emit('trackCurrentJob')
     }
 
-    get reloadRequiredColor() {
+    get reloadRequiredColor(): string {
         return this.$store.state.viewer.reloadRequired ? 'green' : ''
     }
 
-    get qualityColor() {
+    get qualityColor(): string {
         return this.renderQuality < 2 ? 'red' : ''
     }
 
@@ -103,7 +103,7 @@ export default class Toolbar extends Mixins(ViewerMixin) {
     }
 
     get canLiveTrack(): boolean {
-        return !this.$store.state.viewer.liveTracking && this.$store.getters['printer/isPrinting']
+        return !this.$store.state.viewer.liveTracking && this.$store.getters['printer/isPrinting'] && !this.showProgress
     }
 }
 </script>
