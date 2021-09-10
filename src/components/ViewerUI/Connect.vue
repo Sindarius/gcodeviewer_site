@@ -31,7 +31,7 @@
                             <div v-if="connectionType === 1">
                                 Depending on your configuration you may need to supply an api key for connection. <br />
                                 Instructions are available here <a href="https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key" target="_blank">https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key</a> under <b>Retreiving the API Key</b>
-                                You may have to add https://sindarius.github.io to the cors_domains in moonraker.conf
+                                You may have to add http://www.sindarius.com to the cors_domains in moonraker.conf
                             </div>
                         </v-col>
                     </v-row>
