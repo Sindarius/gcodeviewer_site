@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar absolute app color="primary" dense>
+        <v-app-bar app color="primary" dense>
             <Status></Status>
             <!--
             <v-btn @click="dumpState">State</v-btn>
@@ -31,14 +31,14 @@
 }
 
 .toolbar {
-    position: absolute;
+    position: fixed;
     left: 50%;
     float: left;
-    top: 10px;
+    top: 45px;
 }
 
 .toolbar-sm {
-    position: absolute;
+    position: fixed;
     left: 50%;
     float: left;
     top: 50px;

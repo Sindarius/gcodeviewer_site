@@ -33,11 +33,11 @@
 
 <style scoped lang="scss">
 .canvas-sizing {
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 47px;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 47px);
 }
 .progress-position {
     position: absolute;
@@ -54,7 +54,7 @@
 }
 
 .scrubber {
-    position: absolute;
+    position: fixed;
     left: 5%;
     right: 5%;
     bottom: 5px;
