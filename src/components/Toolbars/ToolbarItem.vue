@@ -5,7 +5,7 @@
                 <v-icon v-bind="size" :color="color">{{ icon }}</v-icon>
             </v-btn>
         </template>
-        <span>{{ title }} {{ size }}</span>
+        <span>{{ title }}</span>
     </v-tooltip>
 </template>
 
@@ -21,7 +21,7 @@ export default class ToolbarItem extends Vue {
     @Prop() title!: string
     @Prop() color!: string
 
-    clicked() {
+    clicked(): void {
         this.$emit('click')
     }
 
