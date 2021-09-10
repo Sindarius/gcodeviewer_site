@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn-toggle class="toggle-align mt-2" dense v-model="selectedButton" multiple>
+        <v-btn-toggle class="toggle-align" dense v-model="selectedButton" multiple>
             <ToolbarItem @click="showFileSelect" :title="$t('viewer.toolbar.openlocal')" icon="mdi-folder-outline"></ToolbarItem>
             <ToolbarItem @click="resetCamera" :title="$t('viewer.toolbar.resetCamera')" icon="mdi-camera-outline"></ToolbarItem>
             <ToolbarItem @click="showToolsDialog = true" :title="$t('viewer.toolbar.toolstitle')" icon="mdi-printer-3d-nozzle-outline"></ToolbarItem>
@@ -34,11 +34,6 @@
 </template>
 
 <style scoped>
-.div-align {
-    position: relative;
-    left: 50%;
-    float: left;
-}
 .toggle-align {
     position: relative;
     left: -50%;

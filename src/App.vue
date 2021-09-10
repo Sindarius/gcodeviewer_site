@@ -31,9 +31,10 @@
 }
 
 .toolbar {
-    position: relative;
+    position: absolute;
     left: 50%;
     float: left;
+    top: 10px;
 }
 </style>
 

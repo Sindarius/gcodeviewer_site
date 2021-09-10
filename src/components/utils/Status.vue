@@ -1,6 +1,6 @@
 <template>
-    <div class="div-style mr-5">
-        <span v-if="getConnectionIcon === ''" class="address-text">Sindarius G-Code Viewer</span>
+    <div class="div-style">
+        <span v-if="getConnectionIcon === ''" :class="getLabelStyle">Sindarius G-Code Viewer</span>
         <span>
             <v-img :contain="true" width="45" height="45" class="align-text mr-3" :src="getConnectionIcon"></v-img>
             <span class="address-text">{{ address }} {{ status }}</span>
@@ -19,6 +19,13 @@
     align-content: center;
     vertical-align: middle;
 }
+.address-text-sm {
+    font-weight: bold;
+    font-size: medium;
+    text-align: left;
+    vertical-align: center;
+}
+
 .address-text {
     font-weight: bold;
     font-size: x-large;
@@ -29,11 +36,11 @@
 
 <script lang="ts">
 import BaseMixin from '@/components/mixin/BaseMixin'
-import { Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import { ConnectionType } from '@/store/connectors/types'
 
 @Component
-export default class Status extends BaseMixin {
+export default class Status extends Mixins(BaseMixin) {
     get getConnectionIcon(): string {
         try {
             switch (this.$store.state.connections.connection?.connectionType) {
@@ -47,6 +54,10 @@ export default class Status extends BaseMixin {
             //do nothing
         }
         return ''
+    }
+
+    get getLabelStyle() {
+        return this.isMobile ? 'address-text-sm' : 'address-text'
     }
 
     get address(): string {

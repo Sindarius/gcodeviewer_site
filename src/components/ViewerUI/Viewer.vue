@@ -8,10 +8,10 @@
         </v-progress-linear>
         <div class="scrubber" v-show="!liveTracking && scrubFileSize > 0">
             <v-row dense>
-                <v-col cols="9" md="9">
+                <v-col cols="9" md="7">
                     <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="3" md="2">
                     <v-btn @click="scrubPlaying = !scrubPlaying">
                         <v-icon v-if="scrubPlaying">mdi-stop</v-icon>
                         <v-icon v-else>mdi-play</v-icon>
@@ -143,6 +143,15 @@ export default class Viewer extends Mixins(ViewerMixin) {
         return this.$store.state.printer.job?.filePosition ?? 0
     }
 
+    get probablyMobile(): boolean {
+        switch (this.$vuetify.breakpoint.name) {
+            case 'xs':
+            case 'sm':
+                return true
+        }
+        return false
+    }
+
     @Watch('currentFilePosition')
     currentFilePositionUpdated(to: number): void {
         if (this.liveTracking) {
@@ -241,17 +250,17 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     @Watch('scrubPlaying') scrubPlayingChanaged(to: boolean): void {
         if (to) {
+            ViewerMixin.scrubPlaying = true
             viewer.gcodeProcessor.updateFilePosition(this.scrubPosition - 30000)
             this.scrubInterval = setInterval(() => {
-                if (this.scrubPlaying) {
-                    this.scrubPosition += 100 * this.scrubSpeed
-                    viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
-                }
+                this.scrubPosition += 100 * this.scrubSpeed
+                viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
             }, 200)
         } else {
             if (this.scrubInterval > -1) {
                 clearInterval(this.scrubInterval)
             }
+            ViewerMixin.scrubPlaying = false
             this.scrubInterval = -1
         }
     }

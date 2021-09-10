@@ -56,7 +56,7 @@ export const getters: GetterTree<Viewer, RootState> = {
                 const value = Number(rq)
                 if (!isNaN(value)) result = value
             } else {
-                result = 1
+                result = 3
             }
         }
         return result
@@ -70,7 +70,7 @@ export const getters: GetterTree<Viewer, RootState> = {
                 const value = Number(rq)
                 if (!isNaN(value)) result = value
             } else {
-                result = 3
+                result = 0
             }
         }
         return result

@@ -8,6 +8,7 @@ let gcodeViewer: any
 @Component
 export default class ViewerMixin extends Mixins(BaseMixin) {
     static reloadRequired = false
+    static scrubPlaying = false
 
     get tools(): Tool[] {
         return this.$store.state.viewer.tools
@@ -214,7 +215,9 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         await new Promise((resolve) => setTimeout(resolve, 500))
         this.beforeRender()
         await gcodeViewer.reload()
-        gcodeViewer.gcodeProcessor.forceRedraw()
+        if (!ViewerMixin.scrubPlaying) {
+            gcodeViewer.gcodeProcessor.forceRedraw()
+        }
         this.showProgress = false
     }
 
@@ -234,8 +237,8 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.gcodeProcessor.setVoxelMode(this.voxelMode)
         gcodeViewer.updateRenderQuality(this.renderQuality)
         gcodeViewer.gcodeProcessor.useHighQualityExtrusion(this.hqRender)
-        gcodeViewer.gcodeProcessor.resetTools()
         gcodeViewer.gcodeProcessor.setAlpha(this.transparency)
+        gcodeViewer.gcodeProcessor.resetTools()
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType) //hard code the nozzle size for now.
