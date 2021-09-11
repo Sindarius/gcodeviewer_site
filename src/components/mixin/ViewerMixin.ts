@@ -227,10 +227,13 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
             gcodeViewer.gcodeProcessor.voxelHeight = this.voxelHeight
         }
 
+        console.log(this.minFeedColor)
+        console.log(this.maxFeedColor)
+        console.log(this.minFeedRate)
+        console.log(this.maxFeedRate)
         gcodeViewer.gcodeProcessor.updateMinFeedColor(this.minFeedColor)
         gcodeViewer.gcodeProcessor.updateMaxFeedColor(this.maxFeedColor)
-        gcodeViewer.gcodeProcessor.updateColorRate(this.minFeedRate)
-        gcodeViewer.gcodeProcessor.updateColorRate(this.maxFeedRate)
+        gcodeViewer.gcodeProcessor.updateColorRate(this.minFeedRate, this.maxFeedRate)
 
         gcodeViewer.setZClipPlane(1000000, -1000000)
         gcodeViewer.setBackgroundColor(this.backgroundColor)
