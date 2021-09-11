@@ -2,8 +2,9 @@
     <v-app>
         <v-app-bar app color="primary" dense>
             <Status></Status>
-
+            <!--
             <v-btn @click="dumpState">State</v-btn>
+            -->
 
             <v-spacer></v-spacer>
             <v-btn v-if="!isConnected" @click="showConnectionDialog = true" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Connect</v-btn>
