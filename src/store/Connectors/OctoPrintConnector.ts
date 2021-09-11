@@ -7,6 +7,7 @@ export default class OctoPrintConnector extends BaseConnector {
     connection_id = ''
     pollInterval = -1
     apiHeader = {}
+    waitingResponse = false
 
     constructor(store: any) {
         super(store)
@@ -38,10 +39,7 @@ export default class OctoPrintConnector extends BaseConnector {
         this.store?.commit('printer/updateOctoPrintModelData', stats.data)
 
         return new Promise((resolve) => {
-            this.pollInterval = setInterval(async () => {
-                const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {} })
-                this.store?.commit('printer/updateOctoPrintModelData', response.data)
-            }, 250)
+            this.startPolling()
             this.connected = true
             resolve()
         })
@@ -60,9 +58,17 @@ export default class OctoPrintConnector extends BaseConnector {
 
     startPolling(): void {
         this.pollInterval = setInterval(async () => {
-            const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {} })
-            this.store?.commit('printer/updateOctoPrintModelData', response.data)
-        }, 250)
+            if (this.waitingResponse) return
+            try {
+                this.waitingResponse = true
+                const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {}, timeout: 400 })
+                this.store?.commit('printer/updateOctoPrintModelData', response.data)
+            } catch {
+                //donothing
+            } finally {
+                this.waitingResponse = false
+            }
+        }, 500)
     }
 
     async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
