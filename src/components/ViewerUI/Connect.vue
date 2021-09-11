@@ -103,60 +103,66 @@ export default class ConnectDialog extends Vue {
     async connect(): Promise<void> {
         if (this.isConnected) return
 
-        this.busy = true
+        if (this.busy) return
 
-        switch (this.connectionType) {
-            case 0:
-                //Try poll connection
-                try {
-                    this.connector = new DuetPollConnector(this.$store)
-                    await this.connector.connect(this.address, this.password)
-                } catch {
-                    //do nothing
-                }
+        try {
+            this.busy = true
 
-                //try rest connector
-                try {
-                    if (!this.connector.connected) {
-                        this.connector = new DuetRestConnector(this.$store)
-                        await this.connector.connect(this.address)
+            switch (this.connectionType) {
+                case 0:
+                    //Try poll connection
+                    try {
+                        this.connector = new DuetPollConnector(this.$store)
+                        await this.connector.connect(this.address, this.password)
+                    } catch {
+                        //do nothing
                     }
-                } catch {
-                    //do nothing
-                }
 
-                break
-            case 1:
-                try {
-                    //try poll connector
-                    this.connector = new KlipperRestConnector(this.$store)
-                    await this.connector.connect(this.address, this.password)
-                } catch {
-                    //do nothing
-                }
-                break
-            case 2:
-                try {
-                    if (this.password === '' || this.password === 'ENTER API KEY') {
-                        this.password = 'ENTER API KEY'
-                        this.busy = false
-                        return
+                    //try rest connector
+                    try {
+                        if (!this.connector.connected) {
+                            this.connector = new DuetRestConnector(this.$store)
+                            await this.connector.connect(this.address)
+                        }
+                    } catch {
+                        //do nothing
                     }
-                    this.connector = new OctoPrintConnector(this.$store)
-                    await this.connector.connect(this.address, this.password)
-                } catch {
-                    //do nothing
-                }
-                break
-        }
 
-        this.busy = false
-        if (!this.connector.connected) {
-            this.error = `Unable to connect to ${this.address}`
-            return
+                    break
+                case 1:
+                    try {
+                        //try poll connector
+                        this.connector = new KlipperRestConnector(this.$store)
+                        await this.connector.connect(this.address, this.password)
+                    } catch {
+                        //do nothing
+                    }
+                    break
+                case 2:
+                    try {
+                        if (this.password === '' || this.password === 'ENTER API KEY') {
+                            this.password = 'ENTER API KEY'
+                            this.busy = false
+                            return
+                        }
+                        this.connector = new OctoPrintConnector(this.$store)
+                        await this.connector.connect(this.address, this.password)
+                    } catch {
+                        //do nothing
+                    }
+                    break
+            }
+
+            this.busy = false
+            if (!this.connector.connected) {
+                this.error = `Unable to connect to ${this.address}`
+                return
+            }
+            this.$store.commit('connections/setConnection', this.connector)
+            this.showDialog = false
+        } finally {
+            this.busy = false
         }
-        this.$store.commit('connections/setConnection', this.connector)
-        this.showDialog = false
     }
     cancel(): void {
         this.showDialog = false

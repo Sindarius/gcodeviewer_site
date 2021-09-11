@@ -3,7 +3,7 @@
         <span v-if="getConnectionIcon === ''" :class="getLabelStyle">Sindarius G-Code Viewer</span>
         <span>
             <v-img :contain="true" width="45" height="45" class="align-text mr-3" :src="getConnectionIcon"></v-img>
-            <span class="address-text">{{ address }} {{ status }}</span>
+            <span :class="getLabelStyle">{{ address }} {{ status }}</span>
         </span>
     </div>
 </template>
@@ -21,16 +21,9 @@
 }
 .address-text-sm {
     font-weight: bold;
-    font-size: medium;
+    font-size: small;
     text-align: left;
     vertical-align: center;
-}
-
-.address-text {
-    font-weight: bold;
-    font-size: x-large;
-    text-align: center;
-    vertical-align: middle;
 }
 </style>
 
@@ -49,6 +42,8 @@ export default class Status extends Mixins(BaseMixin) {
 
                 case ConnectionType.klipper:
                     return require('@/assets/klipper.png')
+                case ConnectionType.octoprint:
+                    return require('@/assets/octoprint.png')
             }
         } catch {
             //do nothing

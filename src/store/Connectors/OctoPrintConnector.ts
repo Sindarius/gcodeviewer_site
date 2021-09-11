@@ -34,12 +34,12 @@ export default class OctoPrintConnector extends BaseConnector {
             }
         }
 
-        const stats = await axios.get(`${this.protocol}://${this.address}/api/printerprofiles`, { headers: this.apiHeader, data: {} })
+        const stats = await axios.get(`${this.protocol}://${this.address}/api/printerprofiles`, { headers: this.apiHeader, data: {}, timeout: 2000 })
         this.store?.commit('printer/updateOctoPrintModelData', stats.data)
 
         return new Promise((resolve) => {
             this.pollInterval = setInterval(async () => {
-                const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {} })
+                const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {}, timeout: 2000 })
                 this.store?.commit('printer/updateOctoPrintModelData', response.data)
             }, 250)
             this.connected = true
@@ -60,7 +60,7 @@ export default class OctoPrintConnector extends BaseConnector {
 
     startPolling(): void {
         this.pollInterval = setInterval(async () => {
-            const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {} })
+            const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {}, timeout: 2000 })
             this.store?.commit('printer/updateOctoPrintModelData', response.data)
         }, 250)
     }
@@ -68,7 +68,7 @@ export default class OctoPrintConnector extends BaseConnector {
     async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
         this.stopPolling()
         try {
-            const getFileInfo = await axios.get(`${this.protocol}://${this.address}/api/files/local/${filename}`, { headers: this.apiHeader, data: {} })
+            const getFileInfo = await axios.get(`${this.protocol}://${this.address}/api/files/local/${filename}`, { headers: this.apiHeader, data: {}, timeout: 2000 })
             const fileUrl = getFileInfo.data.refs.download
 
             const response = await axios.get(`${fileUrl}`, {
