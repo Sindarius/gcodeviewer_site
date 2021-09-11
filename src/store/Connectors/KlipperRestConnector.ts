@@ -35,7 +35,8 @@ export default class KlipperRestConnector extends BaseConnector {
         if (apiKey) {
             this.apiHeader = {
                 'Content-Type': 'text/plain',
-                'X-Api-Key': apiKey
+                'X-Api-Key': apiKey,
+                Accept: 'text/plain'
             }
         }
         //const data = await axios.get(`${this.protocol}://${this.address}/printer/objects/list`)

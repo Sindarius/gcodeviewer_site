@@ -119,6 +119,40 @@ export const mutations: MutationTree<PrinterState> = {
         job.size = state.sourcemodel.virtual_sdcard.file_size
         Vue.set(state, 'job', job)
     },
+    /****************************************************************************/
+    /*  OctoPrint */
+    /****************************************************************************/
+    updateOctoPrintModelData(state, payload) {
+        //Read a profile
+        if (payload.profiles?._default) {
+            try {
+                const volume = payload.profiles?._default.volume
+                const buildVolume: BuildVolume[] = []
+                buildVolume.push(new BuildVolume('X', 0, Number.parseFloat(volume.width)))
+                buildVolume.push(new BuildVolume('Y', 0, Number.parseFloat(volume.height)))
+                buildVolume.push(new BuildVolume('Z', 0, Number.parseFloat(volume.depth)))
+                Vue.set(state, 'buildVolume', buildVolume)
+            } catch (ex) {
+                console.error(ex)
+            }
+        }
+        if (payload.state) {
+            if (payload.state.includes('Printing')) {
+                Vue.set(state, 'status', PrinterStatus.Printing)
+            } else {
+                Vue.set(state, 'status', PrinterStatus.Idle)
+            }
+        }
+        if (payload.job) {
+            const job = new Job()
+            job.fileName = payload.job.file.path
+            job.size = payload.job.file.size
+            if (state.status === PrinterStatus.Printing) {
+                job.filePosition = payload.progress.filepos
+            }
+            Vue.set(state, 'job', job)
+        }
+    },
     clear(state, payload) {
         Vue.set(state, 'sourcemodel', {})
         Vue.set(state, 'motion', {})

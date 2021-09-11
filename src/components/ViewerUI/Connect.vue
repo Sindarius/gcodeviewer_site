@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="showDialog" max-width="400">
+    <v-dialog v-model="showDialog" max-width="425">
         <v-card>
             <v-form @submit.prevent="connect">
                 <v-card-title>Connect To...</v-card-title>
@@ -12,12 +12,14 @@
                             <v-btn-toggle v-model="connectionType" mandatory dense>
                                 <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/duet.png')"></v-img> RRF/Duet</v-btn>
                                 <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/klipper.png')"></v-img> Klipper</v-btn>
+                                <v-btn> <v-img width="25" height="25" class="mr-2" :contain="true" :src="require('@/assets/octoprint.png')"></v-img> OctoPrint<br />(Beta)</v-btn>
                             </v-btn-toggle>
                         </v-col>
                         <v-col cols="12">
                             <v-text-field hint="Address" :persistent-hint="true" v-model="address"></v-text-field>
                             <v-text-field v-show="connectionType === 0" hint="Password (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
                             <v-text-field v-show="connectionType === 1" hint="API Key (Optional)" :persistent-hint="true" v-model="password"></v-text-field>
+                            <v-text-field v-show="connectionType === 2" hint="API Key (Required)" :persistent-hint="true" v-model="password"></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <b>NOTES</b>
@@ -32,6 +34,12 @@
                                 Depending on your configuration you may need to supply an api key for connection. <br />
                                 Instructions are available here <a href="https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key" target="_blank">https://moonraker.readthedocs.io/en/latest/installation/#retreiving-the-api-key</a> under <b>Retreiving the API Key</b>
                                 You may have to add http://www.sindarius.com to the cors_domains in moonraker.conf
+                            </div>
+                            <!-- Octoprint NOtes -->
+                            <div v-if="connectionType === 2">
+                                <strong>OctoPrint interface is still a work in progress. This may or may not function.</strong><br />
+                                API Key is REQUIRED to make a connection. Go here to get more information about generating an API key.
+                                <a href="https://docs.octoprint.org/en/master/bundledplugins/appkeys.html?highlight=api" target="_blank">https://docs.octoprint.org/en/master/bundledplugins/appkeys.html?highlight=api</a>
                             </div>
                         </v-col>
                     </v-row>
@@ -58,6 +66,7 @@ import { Component, PropSync } from 'vue-property-decorator'
 import DuetPollConnector from '@/store/connectors/DuetPollConnector'
 import DuetRestConnector from '@/store/connectors/DuetRestConnector'
 import KlipperRestConnector from '@/store/connectors/KlipperRestConnector'
+import OctoPrintConnector from '@/store/connectors/OctoPrintConnector'
 import BaseConnector from '@/store/connectors/BaseConnector'
 import { ConnectionType } from '@/store/connectors/types'
 
@@ -121,6 +130,19 @@ export default class ConnectDialog extends Vue {
                 try {
                     //try poll connector
                     this.connector = new KlipperRestConnector(this.$store)
+                    await this.connector.connect(this.address, this.password)
+                } catch {
+                    //do nothing
+                }
+                break
+            case 2:
+                try {
+                    if (this.password === '' || this.password === 'ENTER API KEY') {
+                        this.password = 'ENTER API KEY'
+                        this.busy = false
+                        return
+                    }
+                    this.connector = new OctoPrintConnector(this.$store)
                     await this.connector.connect(this.address, this.password)
                 } catch {
                     //do nothing

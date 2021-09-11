@@ -16,5 +16,6 @@ export class LastConnection {
 export enum ConnectionType {
     rrf,
     klipper,
+    octoprint,
     unknown
 }
