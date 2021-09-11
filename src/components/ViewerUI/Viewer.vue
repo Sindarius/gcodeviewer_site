@@ -241,11 +241,18 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     @Watch('scrubPlaying') scrubPlayingChanaged(to: boolean): void {
         if (to) {
+            if (this.scrubInterval != -1) {
+                clearInterval(this.scrubInterval)
+            }
+
             ViewerMixin.scrubPlaying = true
             viewer.gcodeProcessor.updateFilePosition(this.scrubPosition - 30000)
             this.scrubInterval = setInterval(() => {
                 this.scrubPosition += 100 * this.scrubSpeed
                 viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
+                if (this.liveTracking) {
+                    this.scrubPlaying = false
+                }
             }, 200)
         } else {
             if (this.scrubInterval > -1) {
