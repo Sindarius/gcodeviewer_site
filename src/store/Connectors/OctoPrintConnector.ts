@@ -54,10 +54,21 @@ export default class OctoPrintConnector extends BaseConnector {
         super.disconnect()
     }
 
-    async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
-        const getFileInfo = await axios.get(`${this.protocol}://${this.address}/api/files/sd/${filename}`, { headers: this.apiHeader, data: {} })
+    stopPolling(): void {
+        clearInterval(this.pollInterval)
+    }
 
+    startPolling(): void {
+        this.pollInterval = setInterval(async () => {
+            const response = await axios.get(`${this.protocol}://${this.address}/api/job`, { headers: this.apiHeader, data: {} })
+            this.store?.commit('printer/updateOctoPrintModelData', response.data)
+        }, 250)
+    }
+
+    async downloadFile(filename: string, statusCallback: (percent: number, status: string) => void | null): Promise<string> {
+        this.stopPolling()
         try {
+            const getFileInfo = await axios.get(`${this.protocol}://${this.address}/api/files/local/${filename}`, { headers: this.apiHeader, data: {} })
             const fileUrl = getFileInfo.data.refs.download
 
             const response = await axios.get(`${fileUrl}`, {
@@ -72,6 +83,8 @@ export default class OctoPrintConnector extends BaseConnector {
             return response.data
         } catch (ex) {
             console.error(ex)
+        } finally {
+            this.startPolling()
         }
         return Promise.reject(`Could not download file ${filename}`)
     }

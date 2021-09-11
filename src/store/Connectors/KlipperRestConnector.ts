@@ -25,7 +25,7 @@ export default class KlipperRestConnector extends BaseConnector {
 
         //get oneshot token - Try to get one shot if we don't have the API_KEY provided
         if (apiKey === '') {
-            const token = await axios.get(`http://${this.address}/access/oneshot_token`, { headers: this.apiHeader })
+            const token = await axios.get(`http://${this.address}/access/oneshot_token`, { headers: this.apiHeader, data: {} })
             const ost = token.data.result
 
             const apiKeyEndPoint = await axios.get(`http://${this.address}/access/api_key?token=${ost}`)
@@ -39,8 +39,6 @@ export default class KlipperRestConnector extends BaseConnector {
                 Accept: 'text/plain'
             }
         }
-        //const data = await axios.get(`${this.protocol}://${this.address}/printer/objects/list`)
-        //console.log(data.data)
 
         const stats = await axios.get(`${this.protocol}://${this.address}/printer/objects/query?configfile&webhooks&motion_report&virtual_sdcard&display_status`, { headers: this.apiHeader, data: {} })
         this.store?.commit('printer/updateKlipperModelData', stats.data.result.status)
