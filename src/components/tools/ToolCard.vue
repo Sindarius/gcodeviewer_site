@@ -41,7 +41,6 @@ export default class ToolCard extends ViewerMixin {
     }
 
     set toolType(value: string) {
-        console.log(value)
         this.tool.toolType = value
     }
 
