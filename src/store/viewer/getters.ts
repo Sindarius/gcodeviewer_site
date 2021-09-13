@@ -96,7 +96,7 @@ export const getters: GetterTree<Viewer, RootState> = {
         return result
     },
     voxelHeight(state) {
-        let result = state.renderMode
+        let result = state.voxelHeight
         if (result === -1) {
             //Check if we have a value in local storage
             const rq = localStorage.getItem('voxelHeight')
