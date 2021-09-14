@@ -14,11 +14,11 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         return this.$store.state.viewer.tools
     }
 
-    viewer() {
+    viewer(): any {
         return gcodeViewer
     }
 
-    setGCodeViewer(value: any) {
+    setGCodeViewer(value: any): void {
         gcodeViewer = value
     }
 
@@ -26,7 +26,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         return this.$store.state.viewer.showProgress
     }
 
-    set showProgress(value) {
+    set showProgress(value: boolean) {
         this.$store.commit('viewer/showProgress', value)
     }
 
@@ -251,7 +251,12 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         }
     }
 
-    resetCamera() {
+    resetCamera(): void {
         gcodeViewer.resetCamera()
+    }
+
+    unload(): void {
+        gcodeViewer.clearScene(true)
+        this.liveTracking = false
     }
 }

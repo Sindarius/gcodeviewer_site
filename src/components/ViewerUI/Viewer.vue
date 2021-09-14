@@ -215,8 +215,10 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     async openLocalFile(file: File): Promise<void> {
         if (!file) return
+        this.unload()
         const reader = new FileReader()
         this.showProgress = true
+        this.liveTracking = false
         this.currentFileName = `${file.name}`
         reader.addEventListener('load', async (event) => {
             const blob = event?.target?.result
