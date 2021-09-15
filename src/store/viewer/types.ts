@@ -25,6 +25,7 @@ export interface Viewer {
     progressColor: boolean | null
     backgroundColor: boolean | null
     gridColor: boolean | null
+    fileOffset: number | null
 }
 
 export class Tool {

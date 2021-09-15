@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-select v-model="renderMode" :items="items" item-text="name" item-value="value" hint="Render Mode" persistent-hint> </v-select>
+        <v-select v-model="renderMode" :items="items" item-text="name" item-value="value" label="Render Mode" persistent-hint> </v-select>
         <v-row dense v-if="renderMode === 1">
             <v-col cols="6">
                 <v-text-field v-model="minFeedRate" type="number" :label="$t('viewer.settings.minfeedrate')"></v-text-field>
@@ -24,6 +24,7 @@
             </v-col>
         </v-row>
         <v-switch class="mt-1 mb-0" v-model="specular" dense :label="$t('viewer.settings.useSpecular')"></v-switch>
+        <v-text-field type="number" v-model="fileOffset" dense :label="$t('viewer.settings.fileOffset')" hint="Adjust if print appears faster than cursor"></v-text-field>
     </div>
 </template>
 

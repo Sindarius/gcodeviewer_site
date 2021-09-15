@@ -146,7 +146,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     @Watch('currentFilePosition')
     currentFilePositionUpdated(to: number): void {
         if (this.liveTracking) {
-            viewer.gcodeProcessor.updateFilePosition(to)
+            viewer.gcodeProcessor.updateFilePosition(to - this.fileOffset)
         }
     }
 

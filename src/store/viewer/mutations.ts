@@ -98,5 +98,9 @@ export const mutations: MutationTree<Viewer> = {
     gridColor(state, payload: string) {
         localStorage.setItem('gridColor', payload)
         Vue.set(state, 'gridColor', payload)
+    },
+    fileOffset(state, payload: number) {
+        localStorage.setItem('fileOffset', `${payload}`)
+        Vue.set(state, 'fileOffset', payload)
     }
 }

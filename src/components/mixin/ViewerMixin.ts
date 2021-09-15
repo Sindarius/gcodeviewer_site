@@ -208,6 +208,14 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/gridColor', value)
     }
 
+    get fileOffset(): number {
+        return this.$store.getters['viewer/fileOffset']
+    }
+
+    set fileOffset(value: number) {
+        this.$store.commit('viewer/fileOffset', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true

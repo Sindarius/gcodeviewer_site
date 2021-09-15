@@ -151,5 +151,8 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     gridColor(state) {
         return getColorLocalStorage(state.gridColor, 'gridColor', '#0000FF')
+    },
+    fileOffset(state) {
+        return getNumberLocalStorage(state.fileOffset, 'fileOffset', 0)
     }
 }

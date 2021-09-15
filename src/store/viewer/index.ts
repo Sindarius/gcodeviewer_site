@@ -46,7 +46,8 @@ export const getDefaultState = (): Viewer => {
         transparency: null,
         progressColor: null,
         backgroundColor: null,
-        gridColor: null
+        gridColor: null,
+        fileOffset: null
     }
 }
 

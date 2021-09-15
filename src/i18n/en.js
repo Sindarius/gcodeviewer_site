@@ -80,7 +80,8 @@ export default {
             useSpecular: 'Specular Lighting',
             transparency: 'Transparency',
             forceLineMode: 'Force Line Mode',
-            voxelMode: 'Voxel Mode (ASMBL)'
+            voxelMode: 'Voxel Mode (ASMBL)',
+            fileOffset: 'File Offset'
         }
     }
 }
