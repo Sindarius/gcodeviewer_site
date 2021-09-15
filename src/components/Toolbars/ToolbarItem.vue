@@ -5,11 +5,16 @@
                 <v-icon v-bind="size" :color="color">{{ icon }}</v-icon>
             </v-btn>
         </template>
-        <span>{{ title }}</span>
+        <span class="whitespace-line">{{ title }}</span>
     </v-tooltip>
 </template>
 
-<style scoped></style>
+<style scoped>
+.whitespace-line {
+    white-space: pre-line;
+    text-align: center;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <canvas class="canvas-sizing" ref="viewercanvas" />
+        <canvas class="canvas-sizing" ref="viewercanvas" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="drop" />
         <v-progress-linear v-show="showProgress" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
             <template v-slot:default="{ value }">
                 <strong class="progress-text">{{ Math.ceil(value) }}% {{ message }} </strong>
@@ -262,6 +262,25 @@ export default class Viewer extends Mixins(ViewerMixin) {
             }
             ViewerMixin.scrubPlaying = false
             this.scrubInterval = -1
+        }
+    }
+
+    dragOver(event: any): void {
+        if ((event.dataTransfer?.files.length ?? -1) > 0) {
+            let file = event.dataTransfer?.files[0]
+        }
+    }
+
+    dragLeave(event: any): void {
+        //
+    }
+
+    async drop(event: DragEvent): Promise<void> {
+        if ((event.dataTransfer?.files.length ?? -1) > 0) {
+            let file = event.dataTransfer?.files[0]
+            if (file) {
+                await this.openLocalFile(file)
+            }
         }
     }
 }

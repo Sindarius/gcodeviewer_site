@@ -66,7 +66,7 @@ export default {
         },
         toolbar: {
             toolstitle: 'Edit Tools',
-            openlocal: 'Open Local File',
+            openlocal: 'Open Local File\nDrag/Drop on Viewer',
             reloadViewer: 'Reload Viewer',
             resetCamera: 'Reset Camera',
             liveTrack: 'Live Track Print'
