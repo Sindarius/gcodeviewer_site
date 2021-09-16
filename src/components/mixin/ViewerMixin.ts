@@ -225,6 +225,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         await gcodeViewer.reload()
         if (!ViewerMixin.scrubPlaying) {
             gcodeViewer.gcodeProcessor.forceRedraw()
+            this.$eventHub.$emit('reloadComplete')
         }
         this.showProgress = false
     }

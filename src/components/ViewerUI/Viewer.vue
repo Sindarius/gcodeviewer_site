@@ -16,6 +16,9 @@
                         <v-icon v-if="scrubPlaying">mdi-stop</v-icon>
                         <v-icon v-else>mdi-play</v-icon>
                     </v-btn>
+                    <v-btn @click="fastForward">
+                        <v-icon>mdi-fast-forward</v-icon>
+                    </v-btn>
                 </v-col>
                 <v-col cols="12" md="2">
                     <v-btn-toggle dense mandatory rounded v-model="scrubSpeed">
@@ -102,6 +105,12 @@ export default class Viewer extends Mixins(ViewerMixin) {
             await this.OpenBenchy()
         })
 
+        this.$eventHub.$on('reloadComplete', () => {
+            if (this.scrubFileSize > 0 && !this.scrubPlaying) {
+                viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
+            }
+        })
+
         //initialize
         if (viewer) return
         viewer = new GCodeViewer(this.viewercanvas)
@@ -125,6 +134,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         this.$eventHub.$off('disconnect')
         this.$eventHub.$off('openLocalFile')
         this.$eventHub.$off('LoadBenchy')
+        this.$eventHub.$off('reloadComplete')
     }
 
     get cursorPosition(): PrinterStateMotion {
@@ -235,6 +245,11 @@ export default class Viewer extends Mixins(ViewerMixin) {
         viewer.clearScene(true)
     }
 
+    fastForward(): void {
+        this.scrubPlaying = false
+        this.scrubPosition = this.scrubFileSize
+    }
+
     @Watch('scrubPosition') scrubPositionChanged(to: number): void {
         if (!this.liveTracking) {
             viewer.gcodeProcessor.updateFilePosition(to)
@@ -246,14 +261,21 @@ export default class Viewer extends Mixins(ViewerMixin) {
             if (this.scrubInterval != -1) {
                 clearInterval(this.scrubInterval)
             }
+            this.scrubPlaying = true
+            if (this.scrubPosition >= this.scrubFileSize) {
+                this.scrubPosition = 0
+            }
 
-            ViewerMixin.scrubPlaying = true
             viewer.gcodeProcessor.updateFilePosition(this.scrubPosition - 30000)
             this.scrubInterval = setInterval(() => {
                 this.scrubPosition += 100 * this.scrubSpeed
                 viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
                 if (this.liveTracking) {
                     this.scrubPlaying = false
+                } else {
+                    if (this.scrubPosition >= this.scrubFileSize) {
+                        this.scrubPlaying = false
+                    }
                 }
             }, 200)
         } else {
@@ -265,14 +287,14 @@ export default class Viewer extends Mixins(ViewerMixin) {
         }
     }
 
-    dragOver(event: any): void {
+    dragOver(event: DragEvent): void {
         if ((event.dataTransfer?.files.length ?? -1) > 0) {
             let file = event.dataTransfer?.files[0]
         }
     }
 
-    dragLeave(event: any): void {
-        //
+    dragLeave(event: DragEvent): void {
+        //Do nothing at the moment
     }
 
     async drop(event: DragEvent): Promise<void> {
