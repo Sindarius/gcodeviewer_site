@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
-    "@sindarius/gcodeviewer": "^2.1.11",
+    "@sindarius/gcodeviewer": "^2.1.12",
     "axios": "^0.21.1",
     "core-js": "^3.17.2",
     "lodash.get": "^4.4.2",
