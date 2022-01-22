@@ -81,7 +81,8 @@ export default {
             transparency: 'Transparency',
             forceLineMode: 'Force Line Mode',
             voxelMode: 'Voxel Mode (ASMBL)',
-            fileOffset: 'File Offset'
+            fileOffset: 'File Offset',
+            g1AsExtrusion: 'G1 As Extrusion (CNC)'
         }
     }
 }

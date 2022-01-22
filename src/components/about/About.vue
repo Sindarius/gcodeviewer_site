@@ -34,7 +34,7 @@ import { Component, Vue, PropSync } from 'vue-property-decorator'
 export default class About extends Vue {
     @PropSync('show', { type: Boolean }) showDialog!: boolean
 
-    loadBenchy() {
+    loadBenchy(): void {
         this.$eventHub.$emit('LoadBenchy')
         this.showDialog = false
     }

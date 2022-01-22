@@ -10,6 +10,7 @@
             <v-btn v-if="!isConnected" @click="showConnectionDialog = true" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Connect</v-btn>
             <v-btn v-else @click="disconnect" class="mr-2"><v-icon class="mr-2">mdi-lan-connect</v-icon> Disconnect</v-btn>
             <v-btn @click="showAboutDialog = true"><v-icon color="green">mdi-information-outline</v-icon></v-btn>
+            <v-btn @click="showChromeInfo = true"> <v-icon>mdi-google-chrome</v-icon></v-btn>
         </v-app-bar>
 
         <v-main class="main-relative">
@@ -17,6 +18,7 @@
             <Connect :show.sync="showConnectionDialog"></Connect>
             <About :show.sync="showAboutDialog"></About>
             <Toolbar :class="toolbarClass"></Toolbar>
+            <ChromeInfo :show.sync="showChromeInfo"></ChromeInfo>
         </v-main>
     </v-app>
 </template>
@@ -56,6 +58,7 @@ import Status from '@/components/utils/Status.vue'
 import Toolbar from '@/components/Toolbars/Toolbar.vue'
 import BaseConnector from './store/connectors/BaseConnector'
 import About from '@/components/about/About.vue'
+import ChromeInfo from '@/components/chromeinfo/ChromeInfo.vue'
 
 import { PrinterStateMotion, PrinterStatus } from './store/printer/types'
 import BaseMixin from './components/mixin/BaseMixin'
@@ -66,13 +69,15 @@ import BaseMixin from './components/mixin/BaseMixin'
         Connect,
         Status,
         Toolbar,
-        About
+        About,
+        ChromeInfo
     }
 })
 export default class App extends Mixins(BaseMixin) {
     showConnectionDialog = false
     showToolsDialog = false
     showAboutDialog = false
+    showChromeInfo = false
 
     get connection(): BaseConnector {
         return this.$store.state.connections.connection

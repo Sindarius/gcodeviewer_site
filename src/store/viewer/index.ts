@@ -47,7 +47,8 @@ export const getDefaultState = (): Viewer => {
         progressColor: null,
         backgroundColor: null,
         gridColor: null,
-        fileOffset: null
+        fileOffset: null,
+        g1AsExtrusion: false
     }
 }
 

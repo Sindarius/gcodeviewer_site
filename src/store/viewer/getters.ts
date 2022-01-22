@@ -154,5 +154,8 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     fileOffset(state) {
         return getNumberLocalStorage(state.fileOffset, 'fileOffset', 0)
+    },
+    g1AsExtrusion(state) {
+        return getBooleanLocalStorage(state.g1AsExtrusion, 'g1AsExtrusion')
     }
 }

@@ -216,6 +216,15 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/fileOffset', value)
     }
 
+    //This is mainly for CNC
+    get g1AsExtrusion(): boolean {
+        return this.$store.getters['viewer/g1AsExtrusion']
+    }
+
+    set g1AsExtrusion(value: boolean) {
+        this.$store.commit('viewer/g1AsExtrusion', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -253,10 +262,14 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.gcodeProcessor.useHighQualityExtrusion(this.hqRender)
         gcodeViewer.gcodeProcessor.setAlpha(this.transparency)
         gcodeViewer.gcodeProcessor.resetTools()
+        gcodeViewer.gcodeProcessor.treatG1Extrusion = this.g1AsExtrusion
+        if (this.g1AsExtrusion) {
+            gcodeViewer.gcodeProcessor.updateForceWireMode(true)
+        }
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
-            gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType) //hard code the nozzle size for now.
-            gcodeViewer.gcodeProcessor.tools[idx].toolType = tool.toolType //Patch until package can be updated
+            gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType)
+            gcodeViewer.gcodeProcessor.tools[idx].toolType = tool.toolType
         }
     }
 
