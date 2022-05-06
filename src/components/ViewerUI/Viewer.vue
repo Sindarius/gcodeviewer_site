@@ -87,7 +87,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     scrubInterval = -1
     scrubFileSize = 0
 
-    mounted(): void {
+    async mounted(): Promise<void> {
         //register events
         this.$eventHub.$on('trackCurrentJob', () => {
             this.trackCurrentJob()
@@ -115,7 +115,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         if (viewer) return
         viewer = new GCodeViewer(this.viewercanvas)
         this.setGCodeViewer(viewer)
-        viewer.init()
+        await viewer.init()
         viewer.setCursorVisiblity(true)
         window.onresize = () => {
             viewer.resize()
