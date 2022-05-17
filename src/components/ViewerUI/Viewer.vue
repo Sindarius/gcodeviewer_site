@@ -122,7 +122,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         }
 
         viewer.gcodeProcessor.loadingProgressCallback = this.updatePercent
-        viewer.gcodeProcessor.G1AsExtrusion = true
+        viewer.gcodeProcessor.g1AsExtrusion = true
 
         if (viewer.lastLoadFailed()) {
             this.renderQuality = 1

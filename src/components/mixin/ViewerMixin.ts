@@ -131,8 +131,10 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     }
 
     set specular(value: boolean) {
-        gcodeViewer.gcodeProcessor.useSpecularColor(value)
-        this.$store.commit('viewer/specular', value)
+        if (gcodeViewer != null) {
+            gcodeViewer.gcodeProcessor.useSpecularColor(value)
+            this.$store.commit('viewer/specular', value)
+        }
     }
 
     get minFeedRate(): number {
