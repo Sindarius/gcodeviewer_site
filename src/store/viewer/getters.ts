@@ -157,5 +157,8 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     g1AsExtrusion(state) {
         return getBooleanLocalStorage(state.g1AsExtrusion, 'g1AsExtrusion')
+    },
+    showGCodeStream(state) {
+        return getBooleanLocalStorage(state.showGCodeStream, 'showGCodeStream')
     }
 }

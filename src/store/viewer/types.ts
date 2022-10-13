@@ -27,6 +27,7 @@ export interface Viewer {
     gridColor: boolean | null
     fileOffset: number | null
     g1AsExtrusion: boolean | null
+    showGCodeStream: boolean | null
 }
 
 export class Tool {

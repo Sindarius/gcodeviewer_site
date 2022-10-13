@@ -106,5 +106,9 @@ export const mutations: MutationTree<Viewer> = {
     g1AsExtrusion(state, payload: boolean) {
         localStorage.setItem('g1AsExtrusion', `${payload}`)
         Vue.set(state, 'g1AsExtrusion', payload)
+    },
+    showGCodeStream(state, payload: boolean) {
+        localStorage.setItem('showGCodeStream', `${payload}`)
+        Vue.set(state, 'showGCodeStream', payload)
     }
 }

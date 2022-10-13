@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="gcode-lines" v-show="showGCodeStream">
+            <CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus"></CodeStream>
+        </div>
         <canvas class="canvas-sizing" ref="viewercanvas" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="drop" />
         <v-progress-linear v-show="showProgress" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
             <template v-slot:default="{ value }">
@@ -12,7 +15,7 @@
                     <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
                 </v-col>
                 <v-col cols="3" md="2">
-                    <v-btn @click="scrubPlaying = !scrubPlaying">
+                    <v-btn ref="playButton" @click="scrubPlaying = !scrubPlaying">
                         <v-icon v-if="scrubPlaying">mdi-stop</v-icon>
                         <v-icon v-else>mdi-play</v-icon>
                     </v-btn>
@@ -63,6 +66,18 @@
     bottom: 5px;
     z-index: 19 !important;
 }
+.gcode-lines {
+    position: fixed;
+    left: 10px;
+    top: 100px;
+    width: 400px;
+    max-height: 200px;
+    overflow: auto;
+    z-index: 19;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+}
 </style>
 
 <script lang="ts">
@@ -73,12 +88,18 @@ import ViewerMixin from '@/components/mixin/ViewerMixin'
 import { BuildVolume, PrinterStateMotion } from '@/store/printer/types'
 import { Viewer as ViewerState } from '@/store/viewer/types'
 import axios from 'axios'
+import CodeStream from './CodeStream.vue'
 
 let viewer!: any
 
-@Component
+@Component({
+    components: {
+        CodeStream
+    }
+})
 export default class Viewer extends Mixins(ViewerMixin) {
     @Ref('viewercanvas') viewercanvas!: HTMLCanvasElement
+    @Ref('playButton') playButton!: any
     progressPercent = 0
     message = ''
     scrubPosition = 0
@@ -86,6 +107,9 @@ export default class Viewer extends Mixins(ViewerMixin) {
     scrubSpeed = 1
     scrubInterval = -1
     scrubFileSize = 0
+    gcodeLines = ''
+    fileData = ''
+    gcodeLineNumber = 0
 
     async mounted(): Promise<void> {
         //register events
@@ -108,6 +132,8 @@ export default class Viewer extends Mixins(ViewerMixin) {
         this.$eventHub.$on('reloadComplete', () => {
             if (this.scrubFileSize > 0 && !this.scrubPlaying) {
                 viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
+                this.gcodeLines = viewer.getGCodeLine()
+                this.gcodeLineNumber = viewer.getGCodeLineNumber()
             }
         })
 
@@ -158,6 +184,8 @@ export default class Viewer extends Mixins(ViewerMixin) {
     currentFilePositionUpdated(to: number): void {
         if (this.liveTracking) {
             viewer.gcodeProcessor.updateFilePosition(to - this.fileOffset)
+            this.gcodeLines = viewer.getGCodeLine()
+            this.gcodeLineNumber = viewer.getGCodeLineNumber()
         }
     }
 
@@ -198,6 +226,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
                 this.progressPercent = 0
                 this.beforeRender()
                 await viewer.processFile(file)
+                this.fileData = viewer.fileData
                 viewer.gcodeProcessor.forceRedraw()
                 this.scrubFileSize = viewer.fileSize
                 this.liveTracking = true
@@ -221,6 +250,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         viewer.gcodeProcessor.updateFilePosition(result.length)
         this.beforeRender()
         await viewer.processFile(result)
+        this.fileData = viewer.fileData
         this.showProgress = false
     }
 
@@ -235,6 +265,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
             const blob = event?.target?.result
             this.beforeRender()
             await viewer.processFile(blob)
+            this.fileData = viewer.fileData
             this.scrubFileSize = viewer.fileSize
             this.showProgress = false
         })
@@ -254,6 +285,9 @@ export default class Viewer extends Mixins(ViewerMixin) {
     @Watch('scrubPosition') scrubPositionChanged(to: number): void {
         if (!this.liveTracking) {
             viewer.gcodeProcessor.updateFilePosition(to)
+            viewer.simulateToolPosition()
+            this.gcodeLines = viewer.getGCodeLine()
+            this.gcodeLineNumber = viewer.getGCodeLineNumber()
         }
     }
 
@@ -268,9 +302,14 @@ export default class Viewer extends Mixins(ViewerMixin) {
             }
 
             viewer.gcodeProcessor.updateFilePosition(this.scrubPosition - 30000)
+            this.gcodeLines = viewer.getGCodeLine()
+            this.gcodeLineNumber = viewer.getGCodeLineNumber()
             this.scrubInterval = setInterval(() => {
                 this.scrubPosition += 100 * this.scrubSpeed
                 viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
+                viewer.simulateToolPosition()
+                this.gcodeLines = viewer.getGCodeLine()
+                this.gcodeLineNumber = viewer.getGCodeLineNumber()
                 if (this.liveTracking) {
                     this.scrubPlaying = false
                 } else {
@@ -305,6 +344,10 @@ export default class Viewer extends Mixins(ViewerMixin) {
                 await this.openLocalFile(file)
             }
         }
+    }
+
+    resetFocus(): void {
+        console.log('Test')
     }
 }
 </script>

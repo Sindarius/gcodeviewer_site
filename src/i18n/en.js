@@ -82,7 +82,8 @@ export default {
             forceLineMode: 'Force Line Mode',
             voxelMode: 'Voxel Mode (ASMBL)',
             fileOffset: 'File Offset',
-            g1AsExtrusion: 'G1 As Extrusion (CNC)'
+            g1AsExtrusion: 'G1 As Extrusion (CNC)',
+            showGCodeStream: 'Show GCode Stream'
         }
     }
 }

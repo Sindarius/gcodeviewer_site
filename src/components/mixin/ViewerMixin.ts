@@ -227,6 +227,15 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/g1AsExtrusion', value)
     }
 
+    set showGCodeStream(value: boolean) {
+        console.log('gcode stream', value)
+        this.$store.commit('viewer/showGCodeStream', value)
+    }
+
+    get showGCodeStream(): boolean {
+        return this.$store.getters['viewer/showGCodeStream']
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
