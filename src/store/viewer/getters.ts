@@ -160,5 +160,8 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     showGCodeStream(state) {
         return getBooleanLocalStorage(state.showGCodeStream, 'showGCodeStream')
+    },
+    perimeterOnly(state) {
+        return getBooleanLocalStorage(state.perimeterOnly, 'perimeterOnly')
     }
 }

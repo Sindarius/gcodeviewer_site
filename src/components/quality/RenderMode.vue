@@ -26,6 +26,7 @@
         <v-switch class="mt-1 mb-0" v-model="specular" dense :label="$t('viewer.settings.useSpecular')"></v-switch>
         <v-switch class="mt-1 mb-0" v-model="g1AsExtrusion" dense :label="$t('viewer.settings.g1AsExtrusion')"></v-switch>
         <v-switch class="mt-1 mb-0" v-model="showGCodeStream" dense :label="$t('viewer.settings.showGCodeStream')"></v-switch>
+        <v-switch class="mt-1 mb-0" v-model="perimeterOnly" dense :label="$t('viewer.settings.perimeterOnly')"></v-switch>
         <v-text-field type="number" v-model="fileOffset" dense :label="$t('viewer.settings.fileOffset')" hint="Adjust if print appears faster than cursor"></v-text-field>
     </div>
 </template>

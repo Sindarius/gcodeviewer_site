@@ -83,7 +83,8 @@ export default {
             voxelMode: 'Voxel Mode (ASMBL)',
             fileOffset: 'File Offset',
             g1AsExtrusion: 'G1 As Extrusion (CNC)',
-            showGCodeStream: 'Show GCode Stream'
+            showGCodeStream: 'Show GCode Stream',
+            perimeterOnly: 'Perimeter Only'
         }
     }
 }

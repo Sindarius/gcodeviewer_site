@@ -110,5 +110,9 @@ export const mutations: MutationTree<Viewer> = {
     showGCodeStream(state, payload: boolean) {
         localStorage.setItem('showGCodeStream', `${payload}`)
         Vue.set(state, 'showGCodeStream', payload)
+    },
+    perimeterOnly(state, payload: boolean) {
+        localStorage.setItem('perimeterOnly', `${payload}`)
+        Vue.set(state, 'perimeterOnly', payload)
     }
 }

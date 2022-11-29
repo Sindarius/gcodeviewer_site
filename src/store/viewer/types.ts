@@ -28,6 +28,7 @@ export interface Viewer {
     fileOffset: number | null
     g1AsExtrusion: boolean | null
     showGCodeStream: boolean | null
+    perimeterOnly: boolean | null
 }
 
 export class Tool {
