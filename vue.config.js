@@ -1,3 +1,9 @@
 module.exports = {
-    transpileDependencies: ['vuetify']
+    transpileDependencies: ['vuetify'],
+    configureWebpack: {
+        plugins: [],
+        module: {
+            rules: []
+        }
+    }
 }

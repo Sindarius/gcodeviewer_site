@@ -54,16 +54,14 @@ export default class CodeStream extends Vue {
 
     @Watch('currentline') currentlineUpdated(to: number) {
         if (this.view) {
-            //console.log('Pre-Focused Element', document.activeElement)
             var line = this.view.state.doc.lineAt(to)
             this.view.dispatch({
                 selection: {
-                    anchor: line.from, //line.from,
-                    head: line.from //line.from
+                    anchor: line.from,
+                    head: line.from
                 },
                 scrollIntoView: true
             })
-            //console.log('Focused Element', document.activeElement)
         }
     }
 }

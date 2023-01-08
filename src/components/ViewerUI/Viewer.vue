@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="gcode-lines" v-show="showGCodeStream">
-            <CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus"></CodeStream>
+            <!--CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus"></CodeStream>-->
         </div>
         <canvas class="canvas-sizing" ref="viewercanvas" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="drop" />
         <v-progress-linear v-show="showProgress" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
