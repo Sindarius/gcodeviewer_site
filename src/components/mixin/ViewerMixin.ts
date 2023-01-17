@@ -228,7 +228,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     }
 
     set showGCodeStream(value: boolean) {
-        console.log('gcode stream', value)
         this.$store.commit('viewer/showGCodeStream', value)
     }
 
@@ -241,7 +240,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     }
 
     set perimeterOnly(value: boolean) {
-        console.log('Perimeter Only', value)
         this.$store.commit('viewer/perimeterOnly', value)
     }
 
@@ -282,9 +280,8 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.gcodeProcessor.useHighQualityExtrusion(this.hqRender)
         gcodeViewer.gcodeProcessor.setAlpha(this.transparency)
         gcodeViewer.gcodeProcessor.resetTools()
-        gcodeViewer.gcodeProcessor.treatG1Extrusion = this.g1AsExtrusion
+        gcodeViewer.gcodeProcessor.g1AsExtrusion = this.g1AsExtrusion
         gcodeViewer.gcodeProcessor.perimeterOnly = this.perimeterOnly
-        console.log(this.perimeterOnly)
         if (this.g1AsExtrusion) {
             gcodeViewer.gcodeProcessor.updateForceWireMode(true)
         }

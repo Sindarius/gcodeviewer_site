@@ -1,5 +1,5 @@
 <template>
-    <div ref="view" @mouseup="mouseUp"></div>
+    <div ref="view" class="codeview" @mouseup="mouseUp" @keydown="keyPress"></div>
 </template>
 
 <style scoped></style>
@@ -7,6 +7,11 @@
 <style>
 .cm-activeLine {
     background-color: #333 !important;
+}
+
+.codeview {
+    height: 100%;
+    overflow: auto;
 }
 </style>
 
@@ -18,8 +23,9 @@ import { EditorState } from '@codemirror/state'
 @Component({})
 export default class CodeStream extends Vue {
     @PropSync('currentline') currentLineNumber!: number
-    @Prop() document = ''
-    @Prop() isSimulating = false
+    @Prop({ type: String, default: '' }) declare document: string
+    @Prop({ type: Boolean, default: false }) declare isSimulating: boolean
+    @Prop({ type: Boolean, default: false }) declare shown: boolean
 
     view: EditorView | undefined = undefined
 
@@ -40,8 +46,16 @@ export default class CodeStream extends Vue {
         }
     }
 
-    @Watch('document') documentUpdated() {
+    keyPress() {
         if (this.view) {
+            let line = this.view.state.doc.lineAt(this.view.state.selection.ranges[0].from)
+            this.$emit('update:currentline', line.to)
+            this.$emit('got-focus')
+        }
+    }
+
+    @Watch('document') documentUpdated() {
+        if (this.view && this.shown) {
             this.view.dispatch({
                 changes: {
                     from: 0,
@@ -53,7 +67,7 @@ export default class CodeStream extends Vue {
     }
 
     @Watch('currentline') currentlineUpdated(to: number) {
-        if (this.view) {
+        if (this.view && this.shown) {
             var line = this.view.state.doc.lineAt(to)
             this.view.dispatch({
                 selection: {

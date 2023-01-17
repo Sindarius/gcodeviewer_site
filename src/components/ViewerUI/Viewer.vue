@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div class="gcode-lines" v-show="showGCodeStream">
-            <!--CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus"></CodeStream>-->
+        <div class="codestream" v-show="showGCodeStream">
+            <CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus" :shown="showGCodeStream"></CodeStream>
         </div>
-        <canvas class="canvas-sizing" ref="viewercanvas" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="drop" />
+        <canvas :class="showGCodeStream ? 'canvas-sizing-codestream' : 'canvas-sizing'" ref="viewercanvas" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="drop" />
         <v-progress-linear v-show="showProgress" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
             <template v-slot:default="{ value }">
                 <strong class="progress-text">{{ Math.ceil(value) }}% {{ message }} </strong>
             </template>
         </v-progress-linear>
-        <div class="scrubber" v-show="!liveTracking && scrubFileSize > 0">
+        <div :class="showGCodeStream ? 'scrubber-codestream' : 'scrubber'" v-show="!liveTracking && scrubFileSize > 0">
             <v-row dense>
                 <v-col cols="9" md="7">
                     <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
@@ -45,6 +45,23 @@
     width: 100%;
     height: calc(100% - 47px);
 }
+
+.canvas-sizing-codestream {
+    position: fixed;
+    top: 47px;
+    left: 0;
+    width: 70%;
+    height: calc(100% - 47px);
+}
+
+.codestream {
+    position: fixed;
+    top: 47px;
+    left: 70%;
+    width: 30%;
+    height: calc(100% - 47px);
+}
+
 .progress-position {
     position: absolute;
     bottom: 100px;
@@ -63,6 +80,13 @@
     position: fixed;
     left: 5%;
     right: 5%;
+    bottom: 5px;
+    z-index: 19 !important;
+}
+.scrubber-codestream {
+    position: fixed;
+    left: 5%;
+    right: 35%;
     bottom: 5px;
     z-index: 19 !important;
 }
