@@ -3,17 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service  build",
+    "lint": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint"
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
-    "@sindarius/gcodeviewer": "3.1.17",
+    "@sindarius/gcodeviewer": "3.2.2",
     "axios": "^0.21.1",
     "codemirror": "^6.0.1",
     "core-js": "^3.17.2",
     "gcode-lang-codemirror": "^0.2.4",
+    "latest": "^0.2.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "regenerator-runtime": "^0.13.9",

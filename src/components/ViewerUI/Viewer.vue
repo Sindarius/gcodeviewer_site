@@ -371,7 +371,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     }
 
     resetFocus(): void {
-        console.log('Test')
+        let i = 0
     }
 }
 </script>

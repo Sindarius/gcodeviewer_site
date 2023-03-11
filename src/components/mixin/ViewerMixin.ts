@@ -1,7 +1,6 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import BaseMixin from './BaseMixin'
 import { Tool } from '@/store/viewer/types'
-import store from '@/store'
 
 let gcodeViewer: any
 
