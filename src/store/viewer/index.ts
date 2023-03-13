@@ -50,7 +50,9 @@ export const getDefaultState = (): Viewer => {
         fileOffset: null,
         g1AsExtrusion: false,
         showGCodeStream: true,
-        perimeterOnly: false
+        perimeterOnly: false,
+        zBelt: false,
+        zBeltAngle: 45
     }
 }
 

@@ -242,6 +242,22 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/perimeterOnly', value)
     }
 
+    get zBelt(): boolean {
+        return this.$store.getters['viewer/zBelt']
+    }
+
+    set zBelt(value: boolean) {
+        this.$store.commit('viewer/zBelt', value)
+    }
+
+    get zBeltAngle(): number {
+        return this.$store.getters['viewer/zBeltAngle']
+    }
+
+    set zBeltAngle(value: number) {
+        this.$store.commit('viewer/zBeltAngle', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -281,6 +297,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.gcodeProcessor.resetTools()
         gcodeViewer.gcodeProcessor.g1AsExtrusion = this.g1AsExtrusion
         gcodeViewer.gcodeProcessor.perimeterOnly = this.perimeterOnly
+        gcodeViewer.setZBelt(this.zBelt, this.zBeltAngle)
         if (this.g1AsExtrusion) {
             gcodeViewer.gcodeProcessor.updateForceWireMode(true)
         }

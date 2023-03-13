@@ -84,7 +84,9 @@ export default {
             fileOffset: 'File Offset',
             g1AsExtrusion: 'G1 As Extrusion (CNC)',
             showGCodeStream: 'Show GCode Stream',
-            perimeterOnly: 'Perimeter Only'
+            perimeterOnly: 'Perimeter Only',
+            zBelt: 'Z Belt',
+            zBeltAngle: 'Z Belt Gantry Angle'
         }
     }
 }

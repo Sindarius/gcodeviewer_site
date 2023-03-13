@@ -29,6 +29,8 @@ export interface Viewer {
     g1AsExtrusion: boolean | null
     showGCodeStream: boolean | null
     perimeterOnly: boolean | null
+    zBelt: boolean | null
+    zBeltAngle: number | null
 }
 
 export class Tool {

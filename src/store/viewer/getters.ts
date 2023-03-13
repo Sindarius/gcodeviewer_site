@@ -163,5 +163,11 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     perimeterOnly(state) {
         return getBooleanLocalStorage(state.perimeterOnly, 'perimeterOnly')
+    },
+    zBelt(state) {
+        return getBooleanLocalStorage(state.zBelt, 'zBelt')
+    },
+    zBeltAngle(state) {
+        return getNumberLocalStorage(state.zBeltAngle, 'zBeltAngle')
     }
 }

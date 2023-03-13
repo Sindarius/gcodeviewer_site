@@ -114,5 +114,13 @@ export const mutations: MutationTree<Viewer> = {
     perimeterOnly(state, payload: boolean) {
         localStorage.setItem('perimeterOnly', `${payload}`)
         Vue.set(state, 'perimeterOnly', payload)
+    },
+    zBelt(state, payload: boolean) {
+        localStorage.setItem('zBelt', `${payload}`)
+        Vue.set(state, 'zBelt', payload)
+    },
+    zBeltAngle(state, payload: number) {
+        localStorage.setItem('zBeltAngle', `${payload}`)
+        Vue.set(state, 'zBeltAngle', payload)
     }
 }
