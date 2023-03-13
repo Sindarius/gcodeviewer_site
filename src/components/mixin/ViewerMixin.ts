@@ -228,6 +228,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
 
     set showGCodeStream(value: boolean) {
         this.$store.commit('viewer/showGCodeStream', value)
+        setTimeout(gcodeViewer.resize(), 500)
     }
 
     get showGCodeStream(): boolean {
