@@ -301,9 +301,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.gcodeProcessor.g1AsExtrusion = this.g1AsExtrusion
         gcodeViewer.gcodeProcessor.perimeterOnly = this.perimeterOnly
         gcodeViewer.setZBelt(this.zBelt, this.zBeltAngle)
-        if (this.g1AsExtrusion) {
-            gcodeViewer.gcodeProcessor.updateForceWireMode(true)
-        }
+
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType)
