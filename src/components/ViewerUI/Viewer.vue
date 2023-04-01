@@ -224,10 +224,10 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     @Watch('buildVolume', { deep: true })
     buildVolumeChanged(to: BuildVolume[]): void {
-        for (var axesIdx in to) {
-            let axes = to[axesIdx]
+        for (const axesIdx in to) {
+            const axes = to[axesIdx]
             if ('XYZ'.includes(axes.axes)) {
-                var letter = axes.axes.toLowerCase()
+                const letter = axes.axes.toLowerCase()
                 viewer.bed.buildVolume[letter].min = axes.min
                 viewer.bed.buildVolume[letter].max = axes.max
             }
@@ -245,7 +245,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
         if (this.currentJob) {
             this.showProgress = true
             this.currentFileName = this.currentJob
-            let file = await this.download(this.currentJob, this.updatePercent)
+            const file = await this.download(this.currentJob, this.updatePercent)
             if (file) {
                 this.progressPercent = 0
                 this.beforeRender()
@@ -263,13 +263,13 @@ export default class Viewer extends Mixins(ViewerMixin) {
     async OpenBenchy(): Promise<void> {
         this.showProgress = true
         this.currentFileName = 'benchy_color.gcode'
-        let response = await axios.get('./benchy_color.gcode', {
+        const response = await axios.get('./benchy_color.gcode', {
             onDownloadProgress: (progressEvent) => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total) / 100
                 this.updatePercent(percentCompleted, `Downloading Benchy`)
             }
         })
-        let result = response.data
+        const result = response.data
         this.scrubFileSize = result.length
         viewer.gcodeProcessor.updateFilePosition(result.length)
         this.beforeRender()
@@ -353,7 +353,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     dragOver(event: DragEvent): void {
         if ((event.dataTransfer?.files.length ?? -1) > 0) {
-            let file = event.dataTransfer?.files[0]
+            //const  file = event.dataTransfer?.files[0]
         }
     }
 
@@ -363,7 +363,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     async drop(event: DragEvent): Promise<void> {
         if ((event.dataTransfer?.files.length ?? -1) > 0) {
-            let file = event.dataTransfer?.files[0]
+            const file = event.dataTransfer?.files[0]
             if (file) {
                 await this.openLocalFile(file)
             }
@@ -371,7 +371,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
     }
 
     resetFocus(): void {
-        let i = 0
+        const i = 0
     }
 }
 </script>

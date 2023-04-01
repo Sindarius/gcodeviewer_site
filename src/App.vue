@@ -50,7 +50,6 @@
 
 <script lang="ts">
 import '@/assets/styles/page.scss'
-import Vue from 'vue'
 import { Component, Mixins } from 'vue-property-decorator'
 import Viewer from '@/components/ViewerUI/Viewer.vue'
 import Connect from '@/components/ViewerUI/Connect.vue'

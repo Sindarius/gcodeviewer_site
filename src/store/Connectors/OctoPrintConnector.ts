@@ -1,6 +1,7 @@
 import axios from 'axios'
 import BaseConnector from './BaseConnector'
 import { ConnectionType } from './types'
+import { Store } from 'vuex'
 
 export default class OctoPrintConnector extends BaseConnector {
     connectionType = ConnectionType.octoprint
@@ -9,7 +10,7 @@ export default class OctoPrintConnector extends BaseConnector {
     apiHeader = {}
     waitingResponse = false
 
-    constructor(store: any) {
+    constructor(store: Store<any>) {
         super(store)
     }
 
@@ -17,6 +18,7 @@ export default class OctoPrintConnector extends BaseConnector {
     async connect(address: string, password = '', protocol = 'http'): Promise<void> {
         this.address = address
         this.password = password
+        this.protocol = protocol
         const apiKey = password
         this.apiHeader = {}
         const apiString = ''

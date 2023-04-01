@@ -1,5 +1,5 @@
 import { Module } from 'vuex'
-import { BuildVolume, PrinterState, PrinterStateMotion } from './types'
+import { BuildVolume, PrinterState } from './types'
 import { actions } from './actions'
 import { mutations } from './mutations'
 import { getters } from './getters'

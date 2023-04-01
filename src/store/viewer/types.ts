@@ -34,7 +34,7 @@ export interface Viewer {
 }
 
 export class Tool {
-    constructor(color = '#00ff00', diameter = 0.4, toolType: any = ToolType.Extruder) {
+    constructor(color = '#00ff00', diameter = 0.4, toolType: ToolType = ToolType.Extruder) {
         this.id = Math.random()
         this.color = color
         this.diameter = diameter

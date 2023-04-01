@@ -48,7 +48,7 @@ export const getDefaultState = (): Viewer => {
         backgroundColor: null,
         gridColor: null,
         fileOffset: null,
-        g1AsExtrusion: false,
+        g1AsExtrusion: null,
         showGCodeStream: true,
         perimeterOnly: false,
         zBelt: false,

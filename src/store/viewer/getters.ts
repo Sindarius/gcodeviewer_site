@@ -4,10 +4,12 @@ import { Viewer } from './types'
 
 function getBooleanLocalStorage(prop: any, fieldname: string): boolean {
     let result = prop
+    console.log(prop)
     if (result === null) {
         //Check if we have a value in local storage
         try {
             const rq = localStorage.getItem(fieldname)
+            console.log('rq', rq)
             result = rq == 'true'
         } catch {
             result = false

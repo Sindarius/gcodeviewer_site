@@ -52,7 +52,7 @@ export default class ToolsDialog extends Mixins(ViewerMixin) {
     toolNumbers = [...Array(10).keys()].map((i) => i + 1)
 
     reset(): void {
-        let defaultTools = getDefaultTools()
+        const defaultTools = getDefaultTools()
         //Deep copy
         this.editTools.splice(0, this.editTools.length)
         this.editTools.push(...JSON.parse(JSON.stringify(defaultTools)))
@@ -78,7 +78,7 @@ export default class ToolsDialog extends Mixins(ViewerMixin) {
     }
 
     numberRule(v: any): boolean | string | TranslateResult {
-        let val = parseInt(v)
+        const val = parseInt(v)
         if (!isNaN(val) && val >= 1 && val <= 10) return true
         return this.$t('viewer.tools.qtyerror')
     }
@@ -96,13 +96,13 @@ export default class ToolsDialog extends Mixins(ViewerMixin) {
         if (this.numberRule(to) !== true) return
 
         if (to > this.editTools.length) {
-            let count = to - this.editTools.length - 1
+            const count = to - this.editTools.length - 1
 
             for (let idx = 0; idx <= count; idx++) {
                 this.editTools.push(new Tool())
             }
         } else {
-            let count = this.editTools.length - to - 1
+            const count = this.editTools.length - to - 1
             for (let idx = 0; idx <= count; idx++) {
                 this.editTools.pop()
             }

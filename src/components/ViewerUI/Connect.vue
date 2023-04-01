@@ -82,7 +82,7 @@ export default class ConnectDialog extends Vue {
 
     mounted(): void {
         try {
-            let lastConnection = this.$store.getters['connections/getLastConnection']
+            const lastConnection = this.$store.getters['connections/getLastConnection']
             if (lastConnection) {
                 this.address = lastConnection.address
                 this.connectionType = lastConnection.connectionType
