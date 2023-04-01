@@ -308,7 +308,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     @Watch('scrubPosition') scrubPositionChanged(to: number): void {
         if (!this.liveTracking) {
-            viewer.gcodeProcessor.updateFilePosition(to)
+            viewer.gcodeProcessor.updateFilePosition(to + 2) //eol fix
             viewer.simulateToolPosition()
             this.gcodeLines = viewer.getGCodeLine()
             this.gcodeLineNumber = viewer.getGCodeLineNumber()
@@ -330,7 +330,7 @@ export default class Viewer extends Mixins(ViewerMixin) {
             this.gcodeLineNumber = viewer.getGCodeLineNumber()
             this.scrubInterval = setInterval(() => {
                 this.scrubPosition += 100 * this.scrubSpeed
-                viewer.gcodeProcessor.updateFilePosition(this.scrubPosition)
+                viewer.gcodeProcessor.updateFilePosition(this.scrubPosition + 2)
                 viewer.simulateToolPosition()
                 this.gcodeLines = viewer.getGCodeLine()
                 this.gcodeLineNumber = viewer.getGCodeLineNumber()
