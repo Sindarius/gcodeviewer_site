@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="codestream" v-show="showGCodeStream">
-            <CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus" :shown="showGCodeStream"></CodeStream>
+            <CodeStream :currentline.sync="scrubPosition" :document="fileData" @got-focus="resetFocus" :shown="showGCodeStream" @updated="codeStreamUpdate"></CodeStream>
         </div>
         <canvas :class="showGCodeStream ? 'canvas-sizing-codestream' : 'canvas-sizing'" ref="viewercanvas" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="drop" />
         <v-progress-linear v-show="showProgress" class="progress-position disable-transition" striped height="30" rounded :value="progressPercent">
@@ -12,10 +12,10 @@
         <div :class="showGCodeStream ? 'scrubber-codestream' : 'scrubber'" v-show="!liveTracking && scrubFileSize > 0">
             <v-row dense>
                 <v-col cols="9" md="7">
-                    <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition"></v-slider>
+                    <v-slider :hint="scrubPosition + '/' + scrubFileSize" :max="scrubFileSize" dense min="0" persistent-hint v-model="scrubPosition" @start="scrubStart" @end="scrubEnd" @change="scrubPositionChanged"></v-slider>
                 </v-col>
                 <v-col cols="3" md="2">
-                    <v-btn ref="playButton" @click="scrubPlaying = !scrubPlaying">
+                    <v-btn ref="playButton" @click="simulatePlay">
                         <v-icon v-if="scrubPlaying">mdi-stop</v-icon>
                         <v-icon v-else>mdi-play</v-icon>
                     </v-btn>
@@ -30,6 +30,7 @@
                         <v-btn :value="5">5x</v-btn>
                         <v-btn :value="10">10x</v-btn>
                         <v-btn :value="20">20x</v-btn>
+                        <v-btn :value="100">100x</v-btn>
                     </v-btn-toggle>
                 </v-col>
             </v-row>
@@ -113,6 +114,7 @@ import { BuildVolume, PrinterStateMotion } from '@/store/printer/types'
 import { Viewer as ViewerState } from '@/store/viewer/types'
 import axios from 'axios'
 import CodeStream from './CodeStream.vue'
+import { watch } from 'vue'
 
 let viewer!: any
 
@@ -173,6 +175,13 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
         viewer.gcodeProcessor.loadingProgressCallback = this.updatePercent
         viewer.gcodeProcessor.g1AsExtrusion = this.g1AsExtrusion
+
+        viewer.simulationUpdatePosition = (position: number) => {
+            this.scrubPosition = position - 2
+        }
+        viewer.simulationStopped = () => {
+            this.scrubPlaying = false
+        }
 
         if (viewer.lastLoadFailed()) {
             this.renderQuality = 1
@@ -302,53 +311,44 @@ export default class Viewer extends Mixins(ViewerMixin) {
     }
 
     fastForward(): void {
+        viewer.stopSimulation()
         this.scrubPlaying = false
         this.scrubPosition = this.scrubFileSize
+        viewer.gcodeProcessor.updateFilePosition(this.scrubFileSize)
+        viewer.simulateToolPosition()
     }
 
-    @Watch('scrubPosition') scrubPositionChanged(to: number): void {
-        if (!this.liveTracking) {
-            viewer.gcodeProcessor.updateFilePosition(to + 2) //eol fix
+    scrubStart() {
+        viewer.simulation = false
+    }
+
+    scrubEnd() {
+        viewer.simulation = this.scrubPlaying
+    }
+
+    scrubPositionChanged(value: number) {
+        const viewerState = viewer.simulation
+        viewer.simulation = false
+        this.$nextTick(() => {
+            this.scrubPosition = value
+            viewer.gcodeProcessor.updateFilePosition(value)
             viewer.simulateToolPosition()
-            this.gcodeLines = viewer.getGCodeLine()
-            this.gcodeLineNumber = viewer.getGCodeLineNumber()
-        }
+            viewer.simulation = viewerState
+        })
     }
 
-    @Watch('scrubPlaying') scrubPlayingChanaged(to: boolean): void {
-        if (to) {
-            if (this.scrubInterval != -1) {
-                clearInterval(this.scrubInterval)
-            }
-            this.scrubPlaying = true
-            if (this.scrubPosition >= this.scrubFileSize) {
-                this.scrubPosition = 0
-            }
+    @Watch('scrubSpeed')
+    scrubSpeedChanged(value: number) {
+        viewer.simulationMultiplier = value
+    }
 
-            viewer.gcodeProcessor.updateFilePosition(this.scrubPosition - 30000)
-            this.gcodeLines = viewer.getGCodeLine()
-            this.gcodeLineNumber = viewer.getGCodeLineNumber()
-            this.scrubInterval = setInterval(() => {
-                this.scrubPosition += 100 * this.scrubSpeed
-                viewer.gcodeProcessor.updateFilePosition(this.scrubPosition + 2)
-                viewer.simulateToolPosition()
-                this.gcodeLines = viewer.getGCodeLine()
-                this.gcodeLineNumber = viewer.getGCodeLineNumber()
-                if (this.liveTracking) {
-                    this.scrubPlaying = false
-                } else {
-                    if (this.scrubPosition >= this.scrubFileSize) {
-                        this.scrubPlaying = false
-                    }
-                }
-            }, 200)
+    simulatePlay() {
+        if (this.scrubPlaying) {
+            viewer.stopSimulation()
         } else {
-            if (this.scrubInterval > -1) {
-                clearInterval(this.scrubInterval)
-            }
-            ViewerMixin.scrubPlaying = false
-            this.scrubInterval = -1
+            viewer.startSimulation()
         }
+        this.scrubPlaying = viewer.simulation
     }
 
     dragOver(event: DragEvent): void {
@@ -372,6 +372,17 @@ export default class Viewer extends Mixins(ViewerMixin) {
 
     resetFocus(): void {
         const i = 0
+    }
+
+    codeStreamUpdate(value: number) {
+        const viewerState = viewer.simulation
+        viewer.simulation = false
+        this.$nextTick(() => {
+            this.scrubPosition = value
+            viewer.gcodeProcessor.updateFilePosition(value)
+            viewer.simulateToolPosition()
+            viewer.simulation = viewerState
+        })
     }
 }
 </script>

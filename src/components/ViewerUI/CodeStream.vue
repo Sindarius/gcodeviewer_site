@@ -1,5 +1,5 @@
 <template>
-    <div ref="view" class="codeview" @mouseup="mouseUp" @keydown="keyPress"></div>
+    <div ref="view" class="codeview" @mouseup="mouseUp" @keydown="keyPress" @keypress="keyPress"></div>
 </template>
 
 <style scoped></style>
@@ -40,7 +40,7 @@ export default class CodeStream extends Vue {
     mouseUp() {
         if (this.view) {
             const line = this.view.state.doc.lineAt(this.view.state.selection.ranges[0].from)
-            this.$emit('update:currentline', line.to)
+            this.$emit('updated', line.to)
             this.view.contentDOM.blur()
             this.$emit('got-focus')
         }
@@ -49,7 +49,7 @@ export default class CodeStream extends Vue {
     keyPress() {
         if (this.view) {
             const line = this.view.state.doc.lineAt(this.view.state.selection.ranges[0].from)
-            this.$emit('update:currentline', line.to)
+            this.$emit('updated', line.to)
             this.$emit('got-focus')
         }
     }

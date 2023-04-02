@@ -220,7 +220,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     //This is mainly for CNC
     get g1AsExtrusion(): boolean {
         const val = this.$store.getters['viewer/g1AsExtrusion']
-        console.log(val)
         return val
     }
 

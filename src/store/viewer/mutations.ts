@@ -104,7 +104,6 @@ export const mutations: MutationTree<Viewer> = {
         Vue.set(state, 'fileOffset', payload)
     },
     g1AsExtrusion(state, payload: boolean) {
-        console.log(payload)
         localStorage.setItem('g1AsExtrusion', `${payload}`)
         Vue.set(state, 'g1AsExtrusion', payload)
     },
