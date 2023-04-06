@@ -67,9 +67,11 @@ export default class ToolsDialog extends Mixins(ViewerMixin) {
     save(): void {
         this.$store.commit('viewer/saveTools', this.editTools)
         if (this.currentFileName) {
-            this.reloadRequired = true
+            this.reloadRequired = false
         }
         this.showDialog = false
+        this.updateTools()
+        this.viewer().gcodeProcessor.forceRedraw()
     }
 
     cancel(): void {

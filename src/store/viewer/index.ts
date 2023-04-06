@@ -52,7 +52,9 @@ export const getDefaultState = (): Viewer => {
         showGCodeStream: true,
         perimeterOnly: false,
         zBelt: false,
-        zBeltAngle: 45
+        zBeltAngle: 45,
+        transparentPercent: 0.25,
+        progressMode: false
     }
 }
 

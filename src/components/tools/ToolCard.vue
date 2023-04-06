@@ -18,6 +18,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 import ViewerMixin from '../mixin/ViewerMixin'
 import { Tool } from '@/store/viewer/types'
 import ColorPicker from './ColorPicker.vue'
+import { Debounce } from 'vue-debounce-decorator'
 
 @Component({
     components: {
@@ -27,11 +28,13 @@ import ColorPicker from './ColorPicker.vue'
 export default class ToolCard extends ViewerMixin {
     @Prop() tool!: Tool
     @Prop() toolIndex!: number
+
     toolTypes = ['Extruder', 'Endmill']
 
     get toolColor(): string {
         return this.tool.color
     }
+
     set toolColor(value: string) {
         this.tool.color = value
     }

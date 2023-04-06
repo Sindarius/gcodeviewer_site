@@ -181,6 +181,18 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/transparency', value)
     }
 
+    get transparentPercent(): number {
+        return this.$store.getters['viewer/transparentPercent']
+    }
+
+    set transparentPercent(value: number) {
+        console.log(value)
+        this.reloadRequired = true
+        gcodeViewer.gcodeProcessor.setTransparencyValue(value / 100)
+        gcodeViewer.gcodeProcessor.forceRedraw()
+        this.$store.commit('viewer/transparentPercent', value)
+    }
+
     get progressColor(): string {
         return this.$store.getters['viewer/progressColor']
     }
@@ -229,7 +241,9 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
 
     set showGCodeStream(value: boolean) {
         this.$store.commit('viewer/showGCodeStream', value)
-        setTimeout(gcodeViewer.resize(), 500)
+        this.$nextTick(() => {
+            gcodeViewer.resize()
+        })
     }
 
     get showGCodeStream(): boolean {
@@ -258,6 +272,15 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
 
     set zBeltAngle(value: number) {
         this.$store.commit('viewer/zBeltAngle', value)
+    }
+
+    get progressMode(): boolean {
+        return this.$store.getters['viewer/progressMode']
+    }
+
+    set progressMode(value: boolean) {
+        this.reloadRequired = true
+        this.$store.commit('viewer/progressMode', value)
     }
 
     async reloadViewer(): Promise<void> {
@@ -300,11 +323,18 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.gcodeProcessor.g1AsExtrusion = this.g1AsExtrusion
         gcodeViewer.gcodeProcessor.perimeterOnly = this.perimeterOnly
         gcodeViewer.setZBelt(this.zBelt, this.zBeltAngle)
+        gcodeViewer.gcodeProcessor.progressMode = this.progressMode
+        gcodeViewer.gcodeProcessor.setTransparencyValue(this.transparentPercent / 100)
+        this.updateTools()
+    }
 
+    updateTools(): void {
+        gcodeViewer.gcodeProcessor.resetTools()
         for (let idx = 0; idx < this.tools.length; idx++) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType)
             gcodeViewer.gcodeProcessor.tools[idx].toolType = tool.toolType
+            console.log(tool)
         }
     }
 

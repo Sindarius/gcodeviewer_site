@@ -122,5 +122,11 @@ export const mutations: MutationTree<Viewer> = {
     zBeltAngle(state, payload: number) {
         localStorage.setItem('zBeltAngle', `${payload}`)
         Vue.set(state, 'zBeltAngle', payload)
+    },
+    transparentPercent(state, payload: number) {
+        Vue.set(state, 'transparentPercent', payload)
+    },
+    progressMode(state, payload: boolean) {
+        Vue.set(state, 'progressMode', payload)
     }
 }

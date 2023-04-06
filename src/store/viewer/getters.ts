@@ -169,5 +169,11 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     zBeltAngle(state) {
         return getNumberLocalStorage(state.zBeltAngle, 'zBeltAngle')
+    },
+    transparentPercent(state) {
+        return state.transparentPercent
+    },
+    progressMode(state) {
+        return state.progressMode
     }
 }

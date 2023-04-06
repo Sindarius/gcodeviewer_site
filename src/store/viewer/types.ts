@@ -31,6 +31,8 @@ export interface Viewer {
     perimeterOnly: boolean | null
     zBelt: boolean | null
     zBeltAngle: number | null
+    transparentPercent: number
+    progressMode: boolean
 }
 
 export class Tool {
