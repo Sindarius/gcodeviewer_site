@@ -334,7 +334,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
             const tool = this.tools[idx]
             gcodeViewer.gcodeProcessor.addTool(tool.color, tool.diameter, tool.toolType)
             gcodeViewer.gcodeProcessor.tools[idx].toolType = tool.toolType
-            console.log(tool)
         }
     }
 
