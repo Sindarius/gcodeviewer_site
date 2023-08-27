@@ -7,43 +7,53 @@
 <template>
     <div>
         <v-form @submit.prevent="set_camera" @keypress.enter="set_camera">
-            <h3>Camera Position</h3>
-            <v-simple-table header="Set Camera Position">
-                <tbody>
-                    <tr>
-                        <td>X</td>
-                        <td><v-text-field v-model="camera_position_x"></v-text-field></td>
-                    </tr>
-                    <tr>
-                        <td>Y</td>
-                        <td><v-text-field v-model="camera_position_y"></v-text-field></td>
-                    </tr>
-                    <tr>
-                        <td>Z</td>
-                        <td><v-text-field v-model="camera_position_z"></v-text-field></td>
-                    </tr>
-                </tbody>
-            </v-simple-table>
-            <h3>Target Position</h3>
-            <v-simple-table header="Set Camera Position" dense>
-                <tbody>
-                    <tr>
-                        <td>X</td>
-                        <td><v-text-field v-model="target_position_x"></v-text-field></td>
-                    </tr>
-                    <tr>
-                        <td>Y</td>
-                        <td><v-text-field v-model="target_position_y"></v-text-field></td>
-                    </tr>
-                    <tr>
-                        <td>Z</td>
-                        <td><v-text-field v-model="target_position_z"></v-text-field></td>
-                    </tr>
-                </tbody>
-            </v-simple-table>
+            <v-row dense>
+                <v-col cols="6">
+                    <h3>Camera Position</h3>
+                    <v-simple-table header="Set Camera Position">
+                        <tbody>
+                            <tr>
+                                <td>X</td>
+                                <td><v-text-field v-model="camera_position_x"></v-text-field></td>
+                            </tr>
+                            <tr>
+                                <td>Y</td>
+                                <td><v-text-field v-model="camera_position_y"></v-text-field></td>
+                            </tr>
+                            <tr>
+                                <td>Z</td>
+                                <td><v-text-field v-model="camera_position_z"></v-text-field></td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>
+                </v-col>
+                <v-col cols="6">
+                    <h3>Target Position</h3>
+                    <v-simple-table header="Set Camera Position" dense>
+                        <tbody>
+                            <tr>
+                                <td>X</td>
+                                <td><v-text-field v-model="target_position_x"></v-text-field></td>
+                            </tr>
+                            <tr>
+                                <td>Y</td>
+                                <td><v-text-field v-model="target_position_y"></v-text-field></td>
+                            </tr>
+                            <tr>
+                                <td>Z</td>
+                                <td><v-text-field v-model="target_position_z"></v-text-field></td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>
+                </v-col>
+            </v-row>
+
             <v-btn type="submit" class="btnwidth" @click="set_camera">Set Camera</v-btn>
         </v-form>
+        <v-text-field v-model="width" />
+        <v-text-field v-model="height" />
         <v-btn @click="play_layers" class="btnwidth">Save Layers</v-btn>
+        <v-btn @click="take_screenshot" class="btnwidth">Take Screenshot</v-btn>
     </div>
 </template>
 
@@ -58,6 +68,8 @@ export default class CustomActions extends Mixins(ViewerMixin) {
         console.log('mounted')
     }
 
+    width: number = 1920
+    height: number = 1080
     camera_x: number = 0
     camera_y: number = 0
     camera_z: number = 0
@@ -117,8 +129,12 @@ export default class CustomActions extends Mixins(ViewerMixin) {
         console.log(`Target ${this.target_x} ${this.target_y} ${this.target_z}`)
         this.setCameraTarget(this.target_x, this.target_y, this.target_z)
     }
+
+    take_screenshot(): void {
+        this.takeScreenshot(this.width, this.height)
+    }
     async play_layers(): Promise<void> {
-        await this.playLayers()
+        await this.playLayers(this.width, this.height)
     }
 }
 </script>

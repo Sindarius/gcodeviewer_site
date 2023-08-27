@@ -327,15 +327,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.showProgress = false
     }
 
-    _layerInterval = -1
-    async playLayers(): Promise<void> {
-        //kill the playback if it is running
-        if (this._layerInterval >= 0) {
-            clearInterval(this._layerInterval)
-            this._layerInterval = -1
-            return
-        }
-
+    async playLayers(width: number, height: number): Promise<void> {
         gcodeViewer.stopSimulation() //Stop the simulation in case it is running
         gcodeViewer.gcodeProcessor.setRenderAnimation(false) //Disable the animation effect as lines are rendered
         const layers = gcodeViewer.getLayers()
@@ -345,13 +337,45 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         for (let currentLayer = 1; currentLayer < layers.length; currentLayer++) {
             gcodeViewer.gcodeProcessor.updateFilePosition(layers[currentLayer])
             //await new Promise((r) => setTimeout(r, 200)) //wait for rendering to happen
-            const data = await gcodeViewer.createScreenshot()
+            const data = await gcodeViewer.createScreenshot(width, height)
             if (data != null) {
                 zip.file(`${currentLayer}.png`, data.slice(data.indexOf(',') + 1), { base64: true }) //Snip encoding data and save
             }
         }
         await zip.generateAsync({ type: 'blob' }).then((content) => {
             FileSaver.saveAs(content, `${this.currentFileName}.zip`)
+        })
+    }
+
+    dataURItoBlob(dataURI: string): Blob {
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+        const byteString = atob(dataURI.split(',')[1])
+
+        // separate out the mime component
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+        // write the bytes of the string to an ArrayBuffer
+        const ab = new ArrayBuffer(byteString.length)
+
+        // create a view into the buffer
+        const ia = new Uint8Array(ab)
+
+        // set the bytes of the buffer to the correct values
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i)
+        }
+
+        // write the ArrayBuffer to a blob, and you're done
+        const blob = new Blob([ab], { type: mimeString })
+        return blob
+    }
+
+    takeScreenshot(width: number, height: number): void {
+        gcodeViewer.createScreenshot(width, height).then((data: string) => {
+            if (data != null) {
+                FileSaver.saveAs(this.dataURItoBlob(data), `${this.currentFileName}.png`)
+            }
         })
     }
 
