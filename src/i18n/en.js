@@ -86,7 +86,10 @@ export default {
             showGCodeStream: 'Show GCode Stream',
             perimeterOnly: 'Perimeter Only',
             zBelt: 'Z Belt',
-            zBeltAngle: 'Z Belt Gantry Angle'
+            zBeltAngle: 'Z Belt Gantry Angle',
+            showNozzle: 'Show Nozzle',
+            showBed: 'Show Bed',
+            showAxis: 'Show Axes'
         }
     }
 }

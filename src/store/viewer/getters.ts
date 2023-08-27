@@ -2,12 +2,13 @@ import { GetterTree } from 'vuex'
 import { RootState } from '../types'
 import { Viewer } from './types'
 
-function getBooleanLocalStorage(prop: any, fieldname: string): boolean {
+function getBooleanLocalStorage(prop: any, fieldname: string, defaultValue: any = false): boolean {
     let result = prop
     if (result === null) {
         //Check if we have a value in local storage
         try {
             const rq = localStorage.getItem(fieldname)
+            if (rq === null) return defaultValue
             result = rq == 'true'
         } catch {
             result = false
@@ -175,5 +176,14 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     progressMode(state) {
         return state.progressMode
+    },
+    showNozzle(state) {
+        return getBooleanLocalStorage(state.showNozzle, 'showNozzle', true)
+    },
+    showBed(state) {
+        return getBooleanLocalStorage(state.showBed, 'showBed', true)
+    },
+    showAxis(state) {
+        return getBooleanLocalStorage(state.showAxis, 'showAxis', true)
     }
 }

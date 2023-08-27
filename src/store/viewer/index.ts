@@ -49,12 +49,15 @@ export const getDefaultState = (): Viewer => {
         gridColor: null,
         fileOffset: null,
         g1AsExtrusion: null,
-        showGCodeStream: true,
+        showGCodeStream: null,
         perimeterOnly: false,
         zBelt: false,
         zBeltAngle: 45,
         transparentPercent: 0.25,
-        progressMode: false
+        progressMode: false,
+        showNozzle: null,
+        showBed: null,
+        showAxis: null
     }
 }
 

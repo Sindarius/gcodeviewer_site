@@ -128,5 +128,17 @@ export const mutations: MutationTree<Viewer> = {
     },
     progressMode(state, payload: boolean) {
         Vue.set(state, 'progressMode', payload)
+    },
+    showNozzle(state, payload: boolean) {
+        localStorage.setItem('showNozzle', `${payload}`)
+        Vue.set(state, 'showNozzle', payload)
+    },
+    showBed(state, payload: boolean) {
+        localStorage.setItem('showBed', `${payload}`)
+        Vue.set(state, 'showBed', payload)
+    },
+    showAxis(state, payload: boolean) {
+        localStorage.setItem('showAxis', `${payload}`)
+        Vue.set(state, 'showAxis', payload)
     }
 }

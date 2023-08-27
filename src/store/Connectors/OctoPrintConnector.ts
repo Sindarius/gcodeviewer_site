@@ -59,7 +59,7 @@ export default class OctoPrintConnector extends BaseConnector {
     }
 
     startPolling(): void {
-        this.pollInterval = setInterval(async () => {
+        this.pollInterval = window.setInterval(async () => {
             if (this.waitingResponse) return
             try {
                 this.waitingResponse = true

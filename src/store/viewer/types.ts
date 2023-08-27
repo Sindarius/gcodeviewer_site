@@ -33,6 +33,9 @@ export interface Viewer {
     zBeltAngle: number | null
     transparentPercent: number
     progressMode: boolean
+    showNozzle: boolean | null
+    showBed: boolean | null
+    showAxis: boolean | null
 }
 
 export class Tool {

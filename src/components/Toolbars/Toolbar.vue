@@ -26,6 +26,11 @@
                     <RenderColors></RenderColors>
                 </template>
             </ToolbarPopover>
+            <ToolbarPopover icon="mdi-cctv">
+                <template v-slot:content>
+                    <CustomActions />
+                </template>
+            </ToolbarPopover>
             <ToolbarItem @click="liveTrack" v-if="canLiveTrack" :title="$t('viewer.toolbar.liveTrack')" icon="mdi-vhs" color="warning"></ToolbarItem>
         </v-btn-toggle>
         <tools-dialog :show.sync="showToolsDialog"></tools-dialog>
@@ -50,6 +55,7 @@ import ToolbarPopover from './ToolbarPopover.vue'
 import RenderQuality from '@/components/quality/RenderQuality.vue'
 import RenderMode from '@/components/quality/RenderMode.vue'
 import RenderColors from '@/components/quality/RenderColors.vue'
+import CustomActions from '@/components/custom/CustomActions.vue'
 
 @Component({
     components: {
@@ -58,7 +64,8 @@ import RenderColors from '@/components/quality/RenderColors.vue'
         ToolbarPopover,
         RenderQuality,
         RenderMode,
-        RenderColors
+        RenderColors,
+        CustomActions
     }
 })
 export default class Toolbar extends Mixins(ViewerMixin) {

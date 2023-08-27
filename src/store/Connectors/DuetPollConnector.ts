@@ -40,7 +40,7 @@ export default class DuetPollConnector extends BaseConnector {
         this.store.commit('printer/updateDuetModelData', { job: job.data.result })
 
         const count = 0
-        this.pollInterval = setInterval(async () => {
+        this.pollInterval = window.setInterval(async () => {
             const response = await axios.get(`${this.protocol}://${this.address}/rr_model?flags=d99fn`)
             this.store?.commit('printer/updateDuetModelData', response.data.result)
             const job = await axios.get(`${this.protocol}://${this.address}/rr_model?key=job&flags=d99vn`)

@@ -1,6 +1,8 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import BaseMixin from './BaseMixin'
 import { Tool } from '@/store/viewer/types'
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 
 let gcodeViewer: any
 
@@ -186,7 +188,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     }
 
     set transparentPercent(value: number) {
-        console.log(value)
         this.reloadRequired = true
         gcodeViewer.gcodeProcessor.setTransparencyValue(value / 100)
         gcodeViewer.gcodeProcessor.forceRedraw()
@@ -283,6 +284,35 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/progressMode', value)
     }
 
+    get showNozzle(): boolean {
+        return this.$store.getters['viewer/showNozzle']
+    }
+
+    set showNozzle(value: boolean) {
+        gcodeViewer.setCursorVisiblity(value)
+        gcodeViewer.gcodeProcessor.forceRedraw()
+        this.$store.commit('viewer/showNozzle', value)
+    }
+
+    get showBed(): boolean {
+        return this.$store.getters['viewer/showBed']
+    }
+
+    set showBed(value: boolean) {
+        gcodeViewer.bed.setRenderMode(value ? 0 : 3)
+        gcodeViewer.gcodeProcessor.forceRedraw()
+        this.$store.commit('viewer/showBed', value)
+    }
+
+    get showAxis(): boolean {
+        return this.$store.getters['viewer/showAxis']
+    }
+
+    set showAxis(value: boolean) {
+        gcodeViewer.axes.show(value)
+        this.$store.commit('viewer/showAxis', value)
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -297,11 +327,41 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.showProgress = false
     }
 
+    _layerInterval = -1
+    async playLayers(): Promise<void> {
+        //kill the playback if it is running
+        if (this._layerInterval >= 0) {
+            clearInterval(this._layerInterval)
+            this._layerInterval = -1
+            return
+        }
+
+        gcodeViewer.stopSimulation() //Stop the simulation in case it is running
+        gcodeViewer.gcodeProcessor.setRenderAnimation(false) //Disable the animation effect as lines are rendered
+        const layers = gcodeViewer.getLayers()
+        if (layers <= 0) return
+        const zip = new JSZip()
+
+        for (let currentLayer = 1; currentLayer < layers.length; currentLayer++) {
+            gcodeViewer.gcodeProcessor.updateFilePosition(layers[currentLayer])
+            //await new Promise((r) => setTimeout(r, 200)) //wait for rendering to happen
+            const data = await gcodeViewer.createScreenshot()
+            if (data != null) {
+                zip.file(`${currentLayer}.png`, data.slice(data.indexOf(',') + 1), { base64: true }) //Snip encoding data and save
+            }
+        }
+        await zip.generateAsync({ type: 'blob' }).then((content) => {
+            FileSaver.saveAs(content, `${this.currentFileName}.zip`)
+        })
+    }
+
     beforeRender(): void {
         if (this.voxelMode) {
             gcodeViewer.gcodeProcessor.voxelWidth = this.voxelWidth
             gcodeViewer.gcodeProcessor.voxelHeight = this.voxelHeight
         }
+
+        gcodeViewer.gcodeProcessor.setRenderAnimation(false) //Disable to test
 
         gcodeViewer.gcodeProcessor.updateMinFeedColor(this.minFeedColor)
         gcodeViewer.gcodeProcessor.updateMaxFeedColor(this.maxFeedColor)
@@ -325,6 +385,9 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.setZBelt(this.zBelt, this.zBeltAngle)
         gcodeViewer.gcodeProcessor.progressMode = this.progressMode
         gcodeViewer.gcodeProcessor.setTransparencyValue(this.transparentPercent / 100)
+        gcodeViewer.setCursorVisiblity(this.showNozzle)
+        gcodeViewer.bed.setRenderMode(this.showBed ? 0 : 3)
+        gcodeViewer.axes.show(this.showAxis)
         this.updateTools()
     }
 
@@ -344,5 +407,13 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
     unload(): void {
         gcodeViewer.clearScene(true)
         this.liveTracking = false
+    }
+
+    setCameraPosition(x: number, y: number, z: number): void {
+        gcodeViewer.setCameraPosition(x, y, z)
+    }
+
+    setCameraTarget(x: number, y: number, z: number): void {
+        gcodeViewer.setCameraTarget(x, y, z)
     }
 }

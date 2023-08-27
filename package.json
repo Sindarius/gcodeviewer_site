@@ -9,11 +9,13 @@
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
-    "@sindarius/gcodeviewer": "3.7.3",
+    "@sindarius/gcodeviewer": "3.7.5",
     "axios": "^0.21.1",
     "codemirror": "^6.0.1",
     "core-js": "^3.17.2",
+    "file-saver": "^2.0.5",
     "gcode-lang-codemirror": "^0.2.4",
+    "jszip": "^3.10.1",
     "latest": "^0.2.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
@@ -22,14 +24,15 @@
     "tslib": "^2.4.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
+    "vue-debounce-decorator": "^1.0.1",
     "vue-i18n": "^8.25.0",
     "vue-property-decorator": "^9.1.2",
-    "vue-debounce-decorator": "^1.0.1",
     "vuetify": "^2.5.8",
     "vuetify-loader": "^1.7.3",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/lodash.merge": "^4.6.6",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
@@ -46,7 +49,7 @@
     "prettier": "^2.2.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
-    "typescript": "~4.1.5",
+    "typescript": "^5.2.2",
     "vue-cli-plugin-vuetify": "~2.4.2",
     "vue-template-compiler": "^2.6.11"
   }

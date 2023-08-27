@@ -17,7 +17,7 @@ export const mutations: MutationTree<PrinterState> = {
         Vue.set(state, 'sourcemodel', result)
 
         //Start updating our ui model
-        if (state.sourcemodel === {}) return
+        if (Object.keys(state).length == 0) return
 
         //get motion values
         const dwcAxes = state.sourcemodel.move.axes
