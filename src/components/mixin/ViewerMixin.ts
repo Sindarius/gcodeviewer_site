@@ -385,8 +385,6 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
             gcodeViewer.gcodeProcessor.voxelHeight = this.voxelHeight
         }
 
-        gcodeViewer.gcodeProcessor.setRenderAnimation(false) //Disable to test
-
         gcodeViewer.gcodeProcessor.updateMinFeedColor(this.minFeedColor)
         gcodeViewer.gcodeProcessor.updateMaxFeedColor(this.maxFeedColor)
         gcodeViewer.gcodeProcessor.updateColorRate(this.minFeedRate, this.maxFeedRate)
