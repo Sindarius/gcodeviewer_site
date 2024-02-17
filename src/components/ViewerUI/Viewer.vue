@@ -299,7 +299,6 @@ export default class Viewer extends Mixins(ViewerMixin) {
             const blob = event?.target?.result
             this.beforeRender()
             await viewer.processFile(blob)
-            console.log(viewer.getLayers())
             this.fileData = viewer.fileData
             this.scrubFileSize = viewer.fileSize
             this.showProgress = false
