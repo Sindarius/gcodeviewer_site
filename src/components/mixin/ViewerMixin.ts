@@ -313,6 +313,16 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         this.$store.commit('viewer/showAxis', value)
     }
 
+    get persistTravel(): boolean {
+        return this.$store.getters['viewer/persistTravel']
+    }
+
+    set persistTravel(value: boolean) {
+        gcodeViewer.gcodeProcessor.setTravelPersistence(value)
+        this.$store.commit('viewer/persistTravel', value)
+        gcodeViewer.gcodeProcessor.forceRedraw()
+    }
+
     async reloadViewer(): Promise<void> {
         this.reloadRequired = false
         this.showProgress = true
@@ -410,6 +420,7 @@ export default class ViewerMixin extends Mixins(BaseMixin) {
         gcodeViewer.setCursorVisiblity(this.showNozzle)
         gcodeViewer.bed.setRenderMode(this.showBed ? 0 : 3)
         gcodeViewer.axes.show(this.showAxis)
+        gcodeViewer.gcodeProcessor.persistTravels = this.persistTravel
         this.updateTools()
     }
 

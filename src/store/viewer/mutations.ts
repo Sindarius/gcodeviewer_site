@@ -140,5 +140,9 @@ export const mutations: MutationTree<Viewer> = {
     showAxis(state, payload: boolean) {
         localStorage.setItem('showAxis', `${payload}`)
         Vue.set(state, 'showAxis', payload)
+    },
+    persistTravel(state, payload: boolean) {
+        localStorage.setItem('persistTravel', `${payload}`)
+        Vue.set(state, 'persistTravel', payload)
     }
 }

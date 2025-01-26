@@ -57,7 +57,8 @@ export const getDefaultState = (): Viewer => {
         progressMode: false,
         showNozzle: null,
         showBed: null,
-        showAxis: null
+        showAxis: null,
+        persistTravel: null
     }
 }
 

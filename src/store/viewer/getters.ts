@@ -185,5 +185,8 @@ export const getters: GetterTree<Viewer, RootState> = {
     },
     showAxis(state) {
         return getBooleanLocalStorage(state.showAxis, 'showAxis', true)
+    },
+    persistTravel(state) {
+        return getBooleanLocalStorage(state.persistTravel, 'persistTravel', false)
     }
 }

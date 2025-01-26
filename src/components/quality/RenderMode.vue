@@ -14,6 +14,8 @@
                     <v-col cols="6"><color-picker v-model="maxFeedColor"></color-picker> </v-col>
                 </v-row>
                 <v-switch class="mt-1 mb-0" v-model="travelMoves" dense label="Show Travel Moves"></v-switch>
+                <v-switch class="mt-1 mb-0" v-model="persistTravel" dense label="Persist Travel Moves"></v-switch>
+
                 <v-switch class="mt-1 mb-0" v-model="progressMode" dense label="Progress Mode"></v-switch>
 
                 <v-switch class="ma-0" v-model="transparency" dense :label="$t('viewer.settings.transparency')"></v-switch>
@@ -28,8 +30,8 @@
                         <v-text-field type="number" v-model="voxelHeight" :label="$t('viewer.settings.voxelHeight')"></v-text-field>
                     </v-col>
                     <v-switch class="mt-1 mb-0" v-model="specular" dense :label="$t('viewer.settings.useSpecular')"></v-switch>
-                    <v-switch class="mt-1 mb-0" v-model="g1AsExtrusion" dense :label="$t('viewer.settings.g1AsExtrusion')"></v-switch>
                 </v-row>
+                <v-switch class="mt-1 mb-0" v-model="g1AsExtrusion" dense :label="$t('viewer.settings.g1AsExtrusion')"></v-switch>
             </v-col>
             <v-col cols="6">
                 <v-switch class="mt-1 mb-0" v-model="showGCodeStream" dense :label="$t('viewer.settings.showGCodeStream')"></v-switch>

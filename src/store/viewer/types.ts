@@ -36,6 +36,7 @@ export interface Viewer {
     showNozzle: boolean | null
     showBed: boolean | null
     showAxis: boolean | null
+    persistTravel: boolean | null
 }
 
 export class Tool {
